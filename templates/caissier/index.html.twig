@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Caissier index{% endblock %}
+
+{% block body %}
+    <h1>Caissier index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Matricule</th>
+                <th>Adresse</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Cni</th>
+                <th>Statut</th>
+                <th>Role</th>
+                <th>Authen</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for caissier in caissiers %}
+            <tr>
+                <td>{{ caissier.id }}</td>
+                <td>{{ caissier.nom }}</td>
+                <td>{{ caissier.prenom }}</td>
+                <td>{{ caissier.matricule }}</td>
+                <td>{{ caissier.adresse }}</td>
+                <td>{{ caissier.email }}</td>
+                <td>{{ caissier.contact }}</td>
+                <td>{{ caissier.cni }}</td>
+                <td>{{ caissier.statut }}</td>
+                <td>{{ caissier.role }}</td>
+                <td>{{ caissier.authen }}</td>
+                <td>
+                    <a href="{{ path('caissier_show', {'id': caissier.id}) }}">show</a>
+                    <a href="{{ path('caissier_edit', {'id': caissier.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('caissier_new') }}">Create new</a>
+{% endblock %}

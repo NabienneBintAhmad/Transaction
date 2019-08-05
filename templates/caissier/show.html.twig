@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Caissier{% endblock %}
+
+{% block body %}
+    <h1>Caissier</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ caissier.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ caissier.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ caissier.prenom }}</td>
+            </tr>
+            <tr>
+                <th>Matricule</th>
+                <td>{{ caissier.matricule }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ caissier.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ caissier.email }}</td>
+            </tr>
+            <tr>
+                <th>Contact</th>
+                <td>{{ caissier.contact }}</td>
+            </tr>
+            <tr>
+                <th>Cni</th>
+                <td>{{ caissier.cni }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{{ caissier.statut }}</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>{{ caissier.role }}</td>
+            </tr>
+            <tr>
+                <th>Authen</th>
+                <td>{{ caissier.authen }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('caissier_index') }}">back to list</a>
+
+    <a href="{{ path('caissier_edit', {'id': caissier.id}) }}">edit</a>
+
+    {{ include('caissier/_delete_form.html.twig') }}
+{% endblock %}
