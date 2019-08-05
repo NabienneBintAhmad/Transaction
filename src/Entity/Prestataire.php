@@ -94,11 +94,6 @@ class Prestataire
      */
     private $matricule;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     *  @Assert\NotBlank()
-     */
-    private $statut;
 
     /**
      * @ORM\Column(type="bigint")
@@ -123,9 +118,15 @@ class Prestataire
      */
     private $ninea;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserPrestataire", mappedBy="matriculeEntreprise")
+     */
+    private $userPrestataires;
+
     public function __construct()
     {
         $this->comptes = new ArrayCollection();
+        $this->userPrestataires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -229,18 +230,6 @@ class Prestataire
         return $this;
     }
 
-    public function getStatut(): ?string
-    {
-        return $this->statut;
-    }
-
-    public function setStatut(string $statut): self
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
-
     public function getCompte(): ?int
     {
         return $this->compte;
@@ -304,6 +293,37 @@ class Prestataire
     public function setNinea(string $ninea): self
     {
         $this->ninea = $ninea;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserPrestataire[]
+     */
+    public function getUserPrestataires(): Collection
+    {
+        return $this->userPrestataires;
+    }
+
+    public function addUserPrestataire(UserPrestataire $userPrestataire): self
+    {
+        if (!$this->userPrestataires->contains($userPrestataire)) {
+            $this->userPrestataires[] = $userPrestataire;
+            $userPrestataire->setMatriculeEntreprise($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserPrestataire(UserPrestataire $userPrestataire): self
+    {
+        if ($this->userPrestataires->contains($userPrestataire)) {
+            $this->userPrestataires->removeElement($userPrestataire);
+            // set the owning side to null (unless already changed)
+            if ($userPrestataire->getMatriculeEntreprise() === $this) {
+                $userPrestataire->setMatriculeEntreprise(null);
+            }
+        }
 
         return $this;
     }

@@ -20,7 +20,6 @@ return $getExpiry ? PHP_INT_MAX : Hydrator::hydrate(
                     'cni',
                     'matricule',
                     'role',
-                    'statut',
                     'authent',
                     'prestataires',
                 ],

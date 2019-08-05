@@ -45,6 +45,7 @@ class CaissierController extends AbstractController
                 $user->setUsername($values->username);
                 $user->setPassword($passwordEncoder->encodePassword($user, $values->password));
                 $user->setRoles(["ROLE_CAISSIER"]);
+                $user->setStatut("Debloquer");
                 $errors = $validator->validate($user);
 
             $caissier = new Caissier();
@@ -56,8 +57,8 @@ class CaissierController extends AbstractController
                 $caissier->setEmail($values->email);
                 $caissier->setContact($values->contact);
                 $caissier->setCni($values->cni);
-                $caissier->setStatut($values->statut);
                 $caissier->setRole("Caissier");
+                $caissier->setAuthent($user);
         
             
                 if(count($errors)) {

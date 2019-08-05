@@ -77,11 +77,7 @@ class Caissier
      */
     private $cni;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     *  @Assert\NotBlank()
-     */
-    private $statut;
+   
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -95,6 +91,12 @@ class Caissier
      *  @Assert\NotBlank()
      */
     private $depots;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\User", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $authent;
 
     public function __construct()
     {
@@ -190,17 +192,6 @@ class Caissier
         return $this;
     }
 
-    public function getStatut(): ?string
-    {
-        return $this->statut;
-    }
-
-    public function setStatut(string $statut): self
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
 
     public function getRole(): ?string
     {
@@ -243,6 +234,18 @@ class Caissier
                 $depot->setCaissier(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAuthent(): ?User
+    {
+        return $this->authent;
+    }
+
+    public function setAuthent(User $authent): self
+    {
+        $this->authent = $authent;
 
         return $this;
     }

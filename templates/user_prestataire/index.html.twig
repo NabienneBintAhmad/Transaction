@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UserPrestataire index{% endblock %}
+
+{% block body %}
+    <h1>UserPrestataire index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>Adresse</th>
+                <th>Cni</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user_prestataire in user_prestataires %}
+            <tr>
+                <td>{{ user_prestataire.id }}</td>
+                <td>{{ user_prestataire.nom }}</td>
+                <td>{{ user_prestataire.prenom }}</td>
+                <td>{{ user_prestataire.contact }}</td>
+                <td>{{ user_prestataire.email }}</td>
+                <td>{{ user_prestataire.Adresse }}</td>
+                <td>{{ user_prestataire.cni }}</td>
+                <td>
+                    <a href="{{ path('user_prestataire_show', {'id': user_prestataire.id}) }}">show</a>
+                    <a href="{{ path('user_prestataire_edit', {'id': user_prestataire.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('user_prestataire_new') }}">Create new</a>
+{% endblock %}

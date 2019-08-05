@@ -15,15 +15,14 @@ class RegisterTest extends WebTestCase
         $crawler = $client->request('POST', '/api/register',[],[],
         ['CONTENT_TYPE' => 'application/json'],
         '{
-            "username":"admin11@gmail.com",
+            "username":"admin10@gmail.com",
             "password":"passer1",
-            "nom":"NDIAYE",
-            "prenom" : "Ndioufa",
-            "email": "ndioufahotmail.com",
+            "nom":"DIOP",
+            "prenom" : "Kya",
+            "email": "kya@hotmail.com",
             "adresse" : "Niarry Tally",
              "contact":7623932,
              "cni" : 789456123,
-             "statut" : "Debloquer",
              "nom1":"BADIANE",
             "prenom1" : "Waly",
             "nom_entreprise":"Sunu Service",
@@ -31,7 +30,6 @@ class RegisterTest extends WebTestCase
              "contact1":7622332,
              "cni1" : 7894563253,
              "email1": "abdou@hotmail.com",
-             "statut1" : "debloquer",
              "solde" : 750000
 
         }'

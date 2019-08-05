@@ -60,6 +60,7 @@ class SecurityController extends AbstractController
             $user->setUsername($values->username);
             $user->setPassword($passwordEncoder->encodePassword($user, $values->password));
             $user->setRoles(["ROLE_ADMIN"]);
+            $user->setStatut("Debloquer");
             $errors = $validator->validate($user);
 
             $admin= new Admin();
@@ -72,7 +73,6 @@ class SecurityController extends AbstractController
             $admin->setCni($values->cni);
             $admin->setMatricule($mat);
             $admin->setRole("Admin");
-            $admin->setStatut("Debloquer");
 
             $presta= new Prestataire();
             $presta->setAdmin($admin);
@@ -84,7 +84,6 @@ class SecurityController extends AbstractController
             $presta->setCni($values->cni1);
             $presta->setEmail($values->email1);
             $presta->setMatricule($mat1);
-            $presta->setStatut("Debloquer");
             $presta->setCompte($compt);
             $presta->setNinea($ninea);
 
@@ -101,10 +100,10 @@ class SecurityController extends AbstractController
                     'Content-Type' => 'application/json'
                 ]);
             }
-           /*  $entityManager->persist($user);
+           $entityManager->persist($user);
             $entityManager->persist($admin);
             $entityManager->persist($presta);
-            $entityManager->persist($compte); */
+            $entityManager->persist($compte); 
             $entityManager->flush();
 
             $data = [
@@ -133,10 +132,8 @@ class SecurityController extends AbstractController
         $user = new User(); 
         $user= $userRepository->findOneByusername($values->username);
         $user->setRoles(["ROLE_USERLOCK"]);
-        $admin= new Admin();
-        $admin->SetStatut("Bloquer");
-        $presta= new Prestataire();
-        $presta->SetStatut("Bloquer");
+        $user->SetStatut("Bloquer");
+
       /*   $entityManager->persist($user);
         $entityManager->persist($admin);
         $entityManager->persist($presta); */
