@@ -56,20 +56,20 @@ class Admin
     private $adresse;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
      */
     private $email;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="bigint", unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(min=9, max=15)
      */
     private $contact;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="bigint", unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(min=12, max=15)
      * 
@@ -77,7 +77,7 @@ class Admin
     private $cni;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $matricule;
 

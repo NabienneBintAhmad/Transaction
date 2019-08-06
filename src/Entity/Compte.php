@@ -21,7 +21,7 @@ class Compte
     private $id;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="bigint", unique=true)
      */
     private $numero;
 

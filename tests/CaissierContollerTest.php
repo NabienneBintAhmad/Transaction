@@ -15,7 +15,7 @@ class CaissierContollerTest extends WebTestCase
         $crawler = $client->request('POST', '/api/caissier',[],[],
         ['CONTENT_TYPE' => 'application/json'],
         '{
-            "username":"caissier10@gmail.com",
+            "username":"caissier14@gmail.com",
             "password":"passer1",
             "nom":"NDIAYE",
             "prenom" : "Ndioufa",

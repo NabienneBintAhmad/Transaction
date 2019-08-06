@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\PrestataireRepository")
@@ -62,7 +63,7 @@ class Prestataire
     private $adresse;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="bigint", unique=true)
      * @Assert\Length(min=9, max=15)
      *  @Assert\NotBlank()
     * //@UniqueEntity(fields={"contact"}, message="Ce numero existe déjà")
@@ -71,7 +72,7 @@ class Prestataire
     private $contact;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="bigint", unique=true)
      * @Assert\Length(min=12, max=15)
      *  @Assert\NotBlank()
      * //@UniqueEntity(fields={"cni"}, message="Cette cni existe déjà")
@@ -80,7 +81,7 @@ class Prestataire
     private $cni;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      *  @Assert\NotBlank()
      * //@UniqueEntity(fields={"email"}, message="Cet email existe déjà")
      * @Groups({"register"})
@@ -88,7 +89,7 @@ class Prestataire
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * //@UniqueEntity(fields={"matricule"}, message="Cet matricule existe déjà")
      * @Groups({"register"})
      */
@@ -96,7 +97,7 @@ class Prestataire
 
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="bigint", unique=true)
      */
     private $compte;
 
@@ -111,7 +112,7 @@ class Prestataire
     private $comptes;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      *  @Assert\NotBlank()
      *  //@UniqueEntity(fields={"ninea"}, message="Ce ninea existe déjà")
      * @Groups({"register"})
@@ -122,6 +123,7 @@ class Prestataire
      * @ORM\OneToMany(targetEntity="App\Entity\UserPrestataire", mappedBy="matriculeEntreprise")
      */
     private $userPrestataires;
+
 
     public function __construct()
     {

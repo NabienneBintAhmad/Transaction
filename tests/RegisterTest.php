@@ -15,21 +15,22 @@ class RegisterTest extends WebTestCase
         $crawler = $client->request('POST', '/api/register',[],[],
         ['CONTENT_TYPE' => 'application/json'],
         '{
-            "username":"admin10@gmail.com",
+
+            "username":"admin1@gmail.com",
             "password":"passer1",
             "nom":"DIOP",
             "prenom" : "Kya",
-            "email": "kya@hotmail.com",
+            "email": "kya1@hotmail.com",
             "adresse" : "Niarry Tally",
-             "contact":7623932,
-             "cni" : 789456123,
+             "contact":7633932,
+             "cni" : 7856356123,
              "nom1":"BADIANE",
             "prenom1" : "Waly",
             "nom_entreprise":"Sunu Service",
             "adresse1" : "Dakar",
-             "contact1":7622332,
-             "cni1" : 7894563253,
-             "email1": "abdou@hotmail.com",
+             "contact1":7782332,
+             "cni1" : 78945633693,
+             "email1": "abdou1@hotmail.com",
              "solde" : 750000
 
         }'
