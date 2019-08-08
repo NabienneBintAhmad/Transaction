@@ -2,14 +2,22 @@
 
 namespace App\Entity;
 
+
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
+ *  @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"username"}, message="Cet utilisateur existe déjà")
+ * @Vich\Uploadable
+ *
  */
 class User implements UserInterface
 {
@@ -45,6 +53,83 @@ class User implements UserInterface
     {
         return $this->id;
     }
+
+/**
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+    *  @Assert\File(
+     *     maxSize = "5M",
+     *     mimeTypes = {
+     *         "image/jpeg",
+     *         "image/pjpeg",
+     *         "image/png",
+     *     },
+     * mimeTypesMessage = "Veuillez saisir un bon format d\'image")
+     * 
+     * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
+     * 
+     * @var File
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @var string
+     */
+    private $imageName;
+
+   
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if ($this->imageFile instanceof UploadedFile) {
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function getUpdatedAt(): ? \DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+   
+    public function setUpdatedAt(\DateTimeInterface $updatedAt):self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
 
     /**
      * A visual identifier that represents this user.

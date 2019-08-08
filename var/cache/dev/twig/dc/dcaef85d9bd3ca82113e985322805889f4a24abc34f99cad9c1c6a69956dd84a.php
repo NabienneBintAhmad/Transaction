@@ -482,6 +482,6 @@ class __TwigTemplate_18fd4312aa6377206f30cd1864ce451d37ae2122bedae7c9c6cac1034c7
         {% endfor %}
     </table>
 {% endmacro %}
-", "@WebProfiler/Collector/events.html.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/web-profiler-bundle/Resources/views/Collector/events.html.twig");
+", "@WebProfiler/Collector/events.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/web-profiler-bundle/Resources/views/Collector/events.html.twig");
     }
 }

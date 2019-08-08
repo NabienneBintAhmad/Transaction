@@ -75,6 +75,6 @@ class __TwigTemplate_85248e76148848fcdaa22cbb8ec083d286d8bc37c56ffb5b6cdb87baad3
     <?php echo \$view['form']->block(\$form, 'form_rows') ?>
     <?php echo \$view['form']->rest(\$form) ?>
 </div>
-", "@Framework/Form/form_widget_compound.html.php", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/framework-bundle/Resources/views/Form/form_widget_compound.html.php");
+", "@Framework/Form/form_widget_compound.html.php", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/framework-bundle/Resources/views/Form/form_widget_compound.html.php");
     }
 }

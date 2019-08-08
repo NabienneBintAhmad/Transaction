@@ -424,6 +424,6 @@ file that was distributed with this source code. #}
     {% endblock swagger_initialization %}
 </body>
 </html>
-", "@NelmioApiDoc/SwaggerUi/index.html.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/nelmio/api-doc-bundle/Resources/views/SwaggerUi/index.html.twig");
+", "@NelmioApiDoc/SwaggerUi/index.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/nelmio/api-doc-bundle/Resources/views/SwaggerUi/index.html.twig");
     }
 }

@@ -479,6 +479,6 @@ class __TwigTemplate_abc0a60156c5f4d5baed1c3160413602d6a1596290eba1961aa1605c89e
         </div>
     {% endfor %}
 {% endblock %}
-", "@WebProfiler/Collector/validator.html.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/web-profiler-bundle/Resources/views/Collector/validator.html.twig");
+", "@WebProfiler/Collector/validator.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/web-profiler-bundle/Resources/views/Collector/validator.html.twig");
     }
 }

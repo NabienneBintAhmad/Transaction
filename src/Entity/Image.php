@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ImageRepository")
@@ -23,6 +24,14 @@ class Image
     private $id;
 /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
+    *  @Assert\File(
+     *     maxSize = "5M",
+     *     mimeTypes = {
+     *         "image/jpeg",
+     *         "image/pjpeg",
+     *         "image/png",
+     *     },
+     * mimeTypesMessage = "Veuillez saisir un bon format d\'image")
      * 
      * @Vich\UploadableField(mapping="user_image", fileNameProperty="imageName")
      * 

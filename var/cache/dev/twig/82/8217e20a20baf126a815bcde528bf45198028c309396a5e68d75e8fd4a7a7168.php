@@ -81,6 +81,6 @@ class __TwigTemplate_5e979ac0d3586b87f0eb7ab1aefa99e9e84ee53aeb987b7dd76c0f410d6
     <input type=\"hidden\" name=\"_token\" value=\"{{ csrf_token('delete' ~ depot.id) }}\">
     <button class=\"btn\">Delete</button>
 </form>
-", "depot/_delete_form.html.twig", "/home/nabienne/Bureau/symfony/transacton/templates/depot/_delete_form.html.twig");
+", "depot/_delete_form.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/templates/depot/_delete_form.html.twig");
     }
 }

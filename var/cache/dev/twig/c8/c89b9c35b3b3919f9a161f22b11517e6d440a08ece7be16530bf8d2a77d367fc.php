@@ -375,6 +375,6 @@ class __TwigTemplate_5ec5991a5e986974052dece7bcc5f550e1017edd600849d292659465f22
 
 </body>
 </html>
-", "@ApiPlatform/SwaggerUi/index.html.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/api-platform/core/src/Bridge/Symfony/Bundle/Resources/views/SwaggerUi/index.html.twig");
+", "@ApiPlatform/SwaggerUi/index.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/api-platform/core/src/Bridge/Symfony/Bundle/Resources/views/SwaggerUi/index.html.twig");
     }
 }

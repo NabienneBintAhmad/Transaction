@@ -2,20 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\UserPrestataire;
 use App\Entity\User;
+use App\Form\UserType;
+use App\Entity\Prestataire;
+use App\Entity\UserPrestataire;
 use App\Form\UserPrestataireType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UserPrestataireRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use App\Entity\Prestataire;
 
 /**
  * @Route("/api")
@@ -34,62 +37,64 @@ class UserPrestataireController extends AbstractController
 
     /**
      * @Route("/users", name="user_prestataire_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
-    public function new(Request $request,  UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator)
+    public function new(Request $request,  UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager):Response
     {
         
         $mat = date('y');
-        $idrep = $this->getDoctrine()->getRepository(Prestataire::class)->CreateQueryBuilder('a')
+        $idrep = $this->getDoctrine()->getRepository(UserPrestataire::class)->CreateQueryBuilder('a')
             ->select('Max(a.id)')
             ->getQuery();
             $maxidresult = $idrep ->getResult();
             $maxid = ($maxidresult[0][1] + 1);
             $mat.="~USR@sENT".$maxid;
-            $values = json_decode($request->getContent());
-            if(isset($values->username,$values->password)) {
-
                 $user = new User();
-                $user->setUsername($values->username);
-                $user->setPassword($passwordEncoder->encodePassword($user,$values->password));
-                $user->setRoles(["ROLE_USER"]);
-                $user->setStatut("Debloquer");
-                $errors = $validator->validate($user);
+                $form=$this->createForm(UserType::class, $user);
+                $form->handleRequest($request);
+                $datas=$request->request->all();
+                $file=$request->files->all()['imageFile'];
+                $form->submit($datas); 
+                    $user->setPassword(
+                        $passwordEncoder->encodePassword(
+                            $user,
+                            $form->get('password')->getData()
+                        ));
+                    $user->setRoles(["ROLE_USER"]);
+                    $user->setStatut("debloquer");
+                    $user->setImageFile($file);
+                    $user->setUpdatedAt(new \DateTime('now'));
+                    $entityManager=$this->getDoctrine()->getManager();
+                   $entityManager->persist($user);
+                   $entityManager->flush();
 
 
-                $usersprest = new UserPrestataire();
+                $userpresta = new UserPrestataire();
 
-                $part = $this->getDoctrine()->getRepository(Prestataire::class)->find($values->entreprise);
-                $usersprest->setNom($values->nom);
-                $usersprest->setPrenom($values->prenom);
-                $usersprest->setMatricule($mat);
-                $usersprest->setAdresse($values->adresse);
-                $usersprest->setEmail($values->email);
-                $usersprest->setContact($values->contact);
-                $usersprest->setCni($values->cni);
-                $usersprest->setAuthent($user);
-                $usersprest->setMatriculeEntreprise($part);
-                if(count($errors)) {
-                    $errors = $serializer->serialize($errors, 'json');
-                    return new Response($errors, 500, [
-                        'Content-Type' => 'application/json'
-                    ]);
+                if(!$userpresta->getMatriculeEntreprise())
+                {
+                    $notfound = [
+                        'status' => 404,
+                        'message' => 'Ce prestataire n\' est pas trouvé'
+                    ];
+        
+                    return new JsonResponse($notfound, 404);    
                 }
-                $entityManager->persist($user);
-                $entityManager->persist($usersprest);
-                $entityManager->flush();
-    
-                $data = [
-                    'status' => 201,
-                    'message' => 'Le caisssier a été créé'
-                ];
-    
-                return new JsonResponse($data, 201);
-            }
-            $data = [
-                'status' => 500,
-                'message' => 'pas insertion!!!'
-            ];
-            return new JsonResponse($data, 500);
+
+                $form = $this->createForm(UserPrestataireType::class, $userpresta);
+                $form->handleRequest($request);
+                $data = $request->request->all();
+                $form->submit($data);
+                $userpresta->setMatricule($mat); 
+                $entityManager=$this->getDoctrine()->getManager();
+                $entityManager->persist($userpresta);
+               $entityManager->flush(); 
+
+               return new Response('Inserré',Response::HTTP_CREATED);
+                
+  
+          
+
     }
 
     /**

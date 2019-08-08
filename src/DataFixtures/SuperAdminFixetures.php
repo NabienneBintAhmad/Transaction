@@ -22,6 +22,8 @@ class SuperAdminFixetures extends Fixture
         $user->setPassword($password);
         $user->setRoles(["ROLE_SUPERADMIN"]);
         $user->setStatut("Toujours active");
+        $user->setImageName("rthbhnbnj.jpg");
+        $user->setUpdatedAt(new \DateTime);
         $manager->persist($user);
         $manager->flush();
     }

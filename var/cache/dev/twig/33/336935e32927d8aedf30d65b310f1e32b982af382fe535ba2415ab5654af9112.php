@@ -227,6 +227,6 @@ class __TwigTemplate_ed123e68ea521d2d4a830e96d4d055bfb39e78225fbe6ab26218c21a20d
         </div>
     </form>
 </div>
-", "@WebProfiler/Profiler/search.html.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/search.html.twig");
+", "@WebProfiler/Profiler/search.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/search.html.twig");
     }
 }

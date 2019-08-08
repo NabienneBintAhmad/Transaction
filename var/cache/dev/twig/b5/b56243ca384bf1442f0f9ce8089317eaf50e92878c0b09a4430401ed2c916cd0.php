@@ -212,6 +212,6 @@ class __TwigTemplate_768be39b2010cbe71b8a3a7afaf6be507ceecd86521ba92b9dd5006159f
     {% endfor %}
     </tbody>
 </table>
-", "@Twig/Exception/logs.html.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/twig-bundle/Resources/views/Exception/logs.html.twig");
+", "@Twig/Exception/logs.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/logs.html.twig");
     }
 }

@@ -95,6 +95,6 @@ class __TwigTemplate_059d4f9329520d700fab5873cf6b1b46e899ea6a55e1b5eb36547b21c1f
             </trace>
 {% endfor %}
         </traces>
-", "@Twig/Exception/traces.xml.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/twig-bundle/Resources/views/Exception/traces.xml.twig");
+", "@Twig/Exception/traces.xml.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/traces.xml.twig");
     }
 }

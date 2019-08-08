@@ -2,9 +2,12 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use App\Entity\UserPrestataire;
 use Symfony\Component\Form\AbstractType;
+use App\Entity\Prestataire;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserPrestataireType extends AbstractType
@@ -16,10 +19,16 @@ class UserPrestataireType extends AbstractType
             ->add('prenom')
             ->add('contact')
             ->add('email')
-            ->add('Adresse')
+            ->add('adresse')
             ->add('cni')
-            ->add('matriculeEntreprise')
-            ->add('authent')
+            ->add('matriculeEntreprise',EntityType::class,[
+                'class'=> Prestataire::class,
+                'choice_label'=> 'entreprise_id'
+                ])
+            ->add('authent',EntityType::class,[
+                'class'=> User::class,
+                'choice_label'=> 'authent_id'
+                ])
         ;
     }
 

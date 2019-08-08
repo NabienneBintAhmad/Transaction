@@ -69,6 +69,6 @@ class __TwigTemplate_1b279d3a225c6db373a1b13bc257b988c01177a943f2c31b4aad1efe2e3
     public function getSourceContext()
     {
         return new Source("{{ { 'error': { 'code': status_code, 'message': status_text, 'exception': exception.toarray } }|json_encode|raw }}
-", "@Twig/Exception/exception.json.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/twig-bundle/Resources/views/Exception/exception.json.twig");
+", "@Twig/Exception/exception.json.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/exception.json.twig");
     }
 }

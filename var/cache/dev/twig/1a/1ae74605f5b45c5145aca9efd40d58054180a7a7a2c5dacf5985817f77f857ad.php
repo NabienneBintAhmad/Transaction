@@ -222,6 +222,6 @@ class __TwigTemplate_1d4da1d6e913a09e42fa945b75aeed8d2fb50daa5f85fb9f5fcc67869dc
         </div>
     {% endif %}
 {% endblock %}
-", "@WebProfiler/Collector/exception.html.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/web-profiler-bundle/Resources/views/Collector/exception.html.twig");
+", "@WebProfiler/Collector/exception.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/web-profiler-bundle/Resources/views/Collector/exception.html.twig");
     }
 }

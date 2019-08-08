@@ -18,6 +18,7 @@ class RegisterTest extends WebTestCase
 
             "username":"admin1@gmail.com",
             "password":"passer1",
+            "imageFile" : ["lena.jpeg"],
             "nom":"DIOP",
             "prenom" : "Kya",
             "email": "kya1@hotmail.com",

@@ -81,6 +81,6 @@ class __TwigTemplate_bd8de5c55d45ab2450ac5fd1018d272087efa1aff56a73b7970dc005deb
     <input type=\"hidden\" name=\"_token\" value=\"{{ csrf_token('delete' ~ caissier.id) }}\">
     <button class=\"btn\">Delete</button>
 </form>
-", "caissier/_delete_form.html.twig", "/home/nabienne/Bureau/symfony/transacton/templates/caissier/_delete_form.html.twig");
+", "caissier/_delete_form.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/templates/caissier/_delete_form.html.twig");
     }
 }

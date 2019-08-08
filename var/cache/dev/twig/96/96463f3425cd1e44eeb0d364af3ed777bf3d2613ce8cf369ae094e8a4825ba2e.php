@@ -204,6 +204,6 @@ class __TwigTemplate_7634ff8a0184edb8a17f9b6919d87de987ee36d5c22773e23bb1b5c211c
         })|raw }}
     </div>
 {% endif %}
-", "@Twig/Exception/trace.html.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/twig-bundle/Resources/views/Exception/trace.html.twig");
+", "@Twig/Exception/trace.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/trace.html.twig");
     }
 }

@@ -140,6 +140,6 @@ class __TwigTemplate_809731fc00322db063cc14469684ee21a2ace42e4ca851b5e72859e202e
 
     {{ include('caissier/_delete_form.html.twig') }}
 {% endblock %}
-", "caissier/edit.html.twig", "/home/nabienne/Bureau/symfony/transacton/templates/caissier/edit.html.twig");
+", "caissier/edit.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/templates/caissier/edit.html.twig");
     }
 }

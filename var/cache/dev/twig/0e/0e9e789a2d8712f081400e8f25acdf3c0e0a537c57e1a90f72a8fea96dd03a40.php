@@ -79,6 +79,6 @@ class __TwigTemplate_f95aae55f3fe82efc0eea782c5cdb78ad3af1170ca0cfc34d7cbc96a8be
 {{ status_code }} {{ status_text }}
 
 */
-", "@Twig/Exception/error.css.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/twig-bundle/Resources/views/Exception/error.css.twig");
+", "@Twig/Exception/error.css.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/error.css.twig");
     }
 }

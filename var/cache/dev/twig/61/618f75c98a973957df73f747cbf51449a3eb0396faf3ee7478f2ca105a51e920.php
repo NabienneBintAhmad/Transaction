@@ -171,6 +171,6 @@ class __TwigTemplate_bde448a834a5925c6293be3fad93ec151eca911ae1cbf427b512888c0c1
         {%- endfor -%}
     </pre>
 {% endif %}
-", "@Doctrine/Collector/explain.html.twig", "/home/nabienne/Bureau/symfony/transacton/vendor/doctrine/doctrine-bundle/Resources/views/Collector/explain.html.twig");
+", "@Doctrine/Collector/explain.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/doctrine/doctrine-bundle/Resources/views/Collector/explain.html.twig");
     }
 }

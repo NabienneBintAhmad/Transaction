@@ -6,8 +6,14 @@ use App\Entity\User;
 use App\Entity\Admin;
 use App\Entity\Image;
 use App\Entity\Compte;
+use App\Form\UserType;
 use App\Form\ImageType;
+use App\Entity\Caissier;
+use App\Form\CompteType;
+use App\Form\AdminTpeType;
+use App\Form\CaissierType;
 use App\Entity\Prestataire;
+use App\Form\PrestqtqireType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +23,10 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,7 +35,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /**
  * @Route("/api")
  */
-class SecurityController extends AbstractController
+class SecurityController extends AbstractFOSRestController
 {
 
 
@@ -53,99 +63,131 @@ class SecurityController extends AbstractController
 
         $compt = random_int(1000000000, 9999999999);
         $ninea = $mat . $compt;
-
-
-        $values = json_decode($request->getContent());
-
-
-/* 
-         $image = new Image();
-        $form=$this->createForm(ImageType::class, $image);
-        $form->handleRequest($request);
-        $datas=$request->request->all();
-        $file=$request->files->all()['imageFile'];
-        $form->submit($datas); 
-     if($form->isSubmitted() && $form->isValid())
-          {
-           $image->setImageFile($file);
-              $image->setUpdatedAt(new \Datetime());
-            $entityManager=$this->getDoctrine()->getManager();
-               $entityManager->persist($image);
-              $entityManager->flush();
-    //       // var_dump($form);die();
-          return $this->handleView($this->view(['status'=>'ok'], Response::HTTP_CREATED));
-        }
-
-         return $this->handleView($this->view($form->getErrors())); */
-
-
-        if (isset($values->username, $values->password)) {
-
             $user = new User();
-            $user->setUsername($values->username);
-            $user->setPassword($passwordEncoder->encodePassword($user, $values->password));
-            $user->setRoles(["ROLE_ADMIN"]);
-            $user->setStatut("Debloquer");
-            $errors = $validator->validate($user);
-
-
+            $form=$this->createForm(UserType::class, $user);
+            $form->handleRequest($request);
+            $datas=$request->request->all();
+            $file=$request->files->all()['imageFile'];
+            $form->submit($datas); 
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $form->get('password')->getData()
+                    ));
+                $user->setRoles(["ROLE_ADMIN"]);
+                $user->setStatut("debloquer");
+                $user->setImageFile($file);
+                $user->setUpdatedAt(new \DateTime('now'));
+               $entityManager->persist($user);
+               $entityManager->flush();
+            
             $admin = new Admin();
-            $admin->setAuthent($user);
-            $admin->setNom($values->nom);
-            $admin->setPrenom($values->prenom);
-            $admin->setAdresse($values->adresse);
-            $admin->setEmail($values->email);
-            $admin->setContact($values->contact);
-            $admin->setCni($values->cni);
-            $admin->setMatricule($mat);
+            if(!$admin->getAuthent()())
+            {
+                $notfound = [
+                    'status' => 404,
+                    'message' => 'Ce user est pas trouvé'
+                ];
+    
+                return new JsonResponse($notfound, 404);    
+            }
+            $form = $this->createForm(AdminTpeType::class, $admin);
+            $form->handleRequest($request);
+            $data = $request->request->all();
+            $form->submit($data);
+            $admin->setMatricule($mat); 
             $admin->setRole("Admin");
+            $entityManager=$this->getDoctrine()->getManager();
+            $entityManager->persist($admin);
+           $entityManager->flush(); 
+            
 
             $presta = new Prestataire();
-            $presta->setAdmin($admin);
-            $presta->setNom($values->nom1);
-            $presta->setPrenom($values->prenom1);
-            $presta->setNomEntreprise($values->nom_entreprise);
-            $presta->setAdresse($values->adresse1);
-            $presta->setContact($values->contact1);
-            $presta->setCni($values->cni1);
-            $presta->setEmail($values->email1);
+            if(!$presta->getAdmin())
+            {
+                $notfound = [
+                    'status' => 404,
+                    'message' => 'Ce admin n\' est pas trouvé'
+                ];
+    
+                return new JsonResponse($notfound, 404);    
+            }
+            $form = $this->createForm(PrestqtqireType::class, $presta);
+            $form->handleRequest($request);
+            $data = $request->request->all();
+            $form->submit($data);
             $presta->setMatricule($mat1);
             $presta->setCompte($compt);
             $presta->setNinea($ninea);
+            $entityManager=$this->getDoctrine()->getManager();
+            $entityManager->persist($presta);
+            $entityManager->flush();  
 
             $compte = new Compte();
-            $compte->setProprietaire($presta);
-            $compte->setNumero($compt);
-            $compte->setSolde($values->solde);
-
-
-
-            if (count($errors)) {
-                $errors = $serializer->serialize($errors, 'json');
-                return new Response($errors, 500, [
-                    'Content-Type' => 'application/json'
-                ]);
+            if(!$compte->getProprietaire()())
+            {
+                $notfound = [
+                    'status' => 404,
+                    'message' => 'Ce prestataire n\' est pas trouvé'
+                ];
+    
+                return new JsonResponse($notfound, 404);    
             }
-            $entityManager->persist($user);
-            $entityManager->persist($admin);
-            $entityManager->persist($presta);
+            $form = $this->createForm(CompteType::class, $compte);
+            $form->handleRequest($request);
+            $data = $request->request->all();
+            $form->submit($data);
+            $compte->setNumero($compt);
+            $compte->setSolde(0);
+
+            $entityManager=$this->getDoctrine()->getManager();
             $entityManager->persist($compte);
             $entityManager->flush();
 
-            $data = [
-                'status' => 201,
-                'message' => 'L\'utilisateur a été créé'
-            ];
-
-            return new JsonResponse($data, 201);
+            return new Response('Inserré',Response::HTTP_CREATED);
+ 
         }
-        $data = [
-            'status' => 500,
-            'message' => 'pas insertion!!!'
-        ];
-        return new JsonResponse($data, 500);
-    }
+        
+   /**
+     * @Route("/compt", name="compt", methods={"POST"})
+     */
+    public function compte(Request $request, EntityManagerInterface $entityManager): Response
+    {
 
+        $values = json_decode($request->getContent());
+        $compte = new Compte();
+      
+        $compt = random_int(1000000000, 9999999999);
+         $form = $this->createForm(CompteType::class, $compte);
+         $form->handleRequest($request);
+         $data = $request->request->all();
+         $form->submit($data);
+       
+        $compte->setNumero($compt);
+        $compte->setSolde(0);
+        $proprietaire = $this->getDoctrine()->getRepository(Prestataire::class)->findOneBy(['nomEntreprise'=>$values->nomEntreprise]);
+        $compte->setProprietaire($proprietaire);
+        // var_dump($proprietaire);die();
+        // if($proprietaire)
+        // {   
+
+            if(!$compte->getProprietaire())
+            {
+                $notfound = [
+                    'status' => 404,
+                    'message' => 'Ce prestataire n\' est pas trouvé'
+                ];
+    
+                return new JsonResponse($notfound, 404);    
+            }
+        $entityManager=$this->getDoctrine()->getManager();
+        $entityManager->persist($compte);
+        $entityManager->flush();
+
+        return new Response('Inserré',Response::HTTP_CREATED);
+        // }
+        //return new Response(' NON Inserré !!!!!',Response::HTTP_BAD_REQUEST);
+  }
 
     /**
      * @Route("/register/bloquer", name="bloquer", methods={"POST","GET"})
@@ -159,10 +201,6 @@ class SecurityController extends AbstractController
         $user = $userRepository->findOneByusername($values->username);
         $user->setRoles(["ROLE_USERLOCK"]);
         $user->SetStatut("Bloquer");
-
-        /*   $entityManager->persist($user);
-        $entityManager->persist($admin);
-        $entityManager->persist($presta); */
         $entityManager->flush();
         $data = [
             'status' => 201,

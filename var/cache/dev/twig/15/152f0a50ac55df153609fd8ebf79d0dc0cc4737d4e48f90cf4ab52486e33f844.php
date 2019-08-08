@@ -71,6 +71,6 @@ class __TwigTemplate_739c72dc6ba33f04b3b8c20d7aef412f21d88b5f9cc81d71a6fedaf6d3d
         <?php echo \$view['form']->widget(\$form); ?>
     </td>
 </tr>
-", "@Framework/FormTable/hidden_row.html.php", "/home/nabienne/Bureau/symfony/transacton/vendor/symfony/framework-bundle/Resources/views/FormTable/hidden_row.html.php");
+", "@Framework/FormTable/hidden_row.html.php", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/framework-bundle/Resources/views/FormTable/hidden_row.html.php");
     }
 }

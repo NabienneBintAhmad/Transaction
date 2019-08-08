@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Depot;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\Compte;
+use App\Form\DepotType;
 use App\Entity\Caissier;
 use App\Form\Depot1Type;
 use App\Repository\DepotRepository;
@@ -12,10 +12,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\VarExporter\Internal\Values;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -38,43 +39,57 @@ class DepotController extends AbstractController
      * @Route("/depot", name="depot", methods={"GET","POST"})
      * @IsGranted("ROLE_CAISSIER")
      */
-    public function new(Request $request,UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator)
+    public function new(Request $request, EntityManagerInterface $entityManager):Response
     {
         $values = json_decode($request->getContent());
         $depot= new Depot();
-        $depot->setMontant($values->montant);
-        $depot->setDate(new \DateTime());
-        $compte = $this->getDoctrine()->getRepository(Compte::class)->find($values->compte_id);
-        $compte->setSolde($compte->getSolde() + $values->montant);
-        $depot->setCompte($compte);
-        $caissier=$this->getDoctrine()->getRepository(Caissier::class)->find($values->caissier_id);
-        $depot->setCaissier($caissier);
-        $errors = $validator->validate($depot);
-        if(isset($values->compte_id,$values->caissier_id))
-        {
-            if(count($errors)) {
-                $errors = $serializer->serialize($errors, 'json');
-                return new Response($errors, 500, [
-                    'Content-Type' => 'application/json'
-                ]);
-            }
-            $entityManager->persist($depot);
+        $form = $this->createForm(DepotType::class, $depot);
+                $form->handleRequest($request);
+                $data = $request->request->all();
+                $form->submit($data);
+ 
+            $depot->setDate(new \DateTime());
+            $depot->setMontant($values->montant);
+
+            $compte = $this->getDoctrine()->getRepository(Compte::class)->find($values->compte);
            
-            $entityManager->flush();
+            $depot->setCompte($compte);
+            if(!$depot->getCompte())
+            {
+                $notfound = [
+                    'status' => 404,
+                    'message' => 'Ce compte est pas trouvé'
+                ];
+    
+                return new JsonResponse($notfound, 404);    
+            }
+            $compte->setSolde($compte->getSolde() + $values->montant);
+            $caissier = $this->getDoctrine()->getRepository(Caissier::class)->find($values->caissier);
+            $depot->setCaissier($caissier);
+            if(!$depot->getCaissier())
+            {
+                $notfound = [
+                    'status' => 404,
+                    'message' => 'Ce caissier est pas trouvé'
+                ];
+    
+                return new JsonResponse($notfound, 404);    
+            }
 
-            $data = [
-                'status' => 201,
-                'message' => 'Inserré'
-            ];
+            if($values->montant<75000)
+            {
 
-            return new JsonResponse($data, 201);
-        }
-        $data = [
-            'status' => 500,
-            'message' => 'pas insertion!!!'
-        ];
-        return new JsonResponse($data, 500);
-        
+                $petit = [
+                    'status' => 404,
+                    'message' => 'Vous ne pouvez déposer un montant inférieure à 75 000 !!!'
+                ];
+                return new JsonResponse($petit, 404);  
+            }
+            $entityManager=$this->getDoctrine()->getManager();
+            $entityManager->persist($depot);
+            $entityManager->flush(); 
+
+           return new Response('Inserré',Response::HTTP_CREATED);
 
     }
 

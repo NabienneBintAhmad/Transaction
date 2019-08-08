@@ -2,9 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\User;
 use App\Entity\Caissier;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CaissierType extends AbstractType
@@ -14,14 +16,14 @@ class CaissierType extends AbstractType
         $builder
             ->add('nom')
             ->add('prenom')
-            ->add('matricule')
             ->add('adresse')
             ->add('email')
             ->add('contact')
             ->add('cni')
-            ->add('statut')
-            ->add('role')
-            ->add('authen')
+            ->add('authent', EntityType::class,[
+                'class'=> User::class,
+                'choice_label'=> 'authent_id'
+                ])
         ;
     }
 

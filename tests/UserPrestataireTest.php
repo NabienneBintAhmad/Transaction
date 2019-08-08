@@ -9,7 +9,7 @@ class UserPrestataireTest extends WebTestCase
     public function testSomething()
     {
         $client = static::createClient([],[
-            'PHP_AUTH_USER'=>'admin10@gmail.com',
+            'PHP_AUTH_USER'=>'admin1@gmail.com',
             'PHP_AUTH_PW'=>'passer1'
          ]);
         $crawler = $client->request('POST', '/api/users',[],[],
@@ -17,7 +17,7 @@ class UserPrestataireTest extends WebTestCase
         '{
             "username":"user1@gmail.com",
             "password":"passer1",
-            "entreprise" : 15,
+            "entreprise" : 20,
             "nom":"DIOP",
             "prenom" : "Kya",
             "contact":7623932,

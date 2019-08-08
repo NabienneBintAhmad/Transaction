@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Compte;
+use App\Form\UserType;
 use App\Entity\Caissier;
+use App\Form\CompteType;
 use App\Form\CaissierType;;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,65 +28,53 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class CaissierController extends AbstractController
 {
 
+      
     /**
-     * @Route("/caissier", name="caissier_new", methods={"GET","POST"})
+     * @Route("/caissier", name="caisssier", methods={"POST","GET"})
      * @IsGranted("ROLE_SUPERADMIN")
      */
-    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator)
+
+
+    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager):Response
     {
-        
         $mat = date('y');
         $idrep = $this->getDoctrine()->getRepository(Caissier::class)->CreateQueryBuilder('a')
             ->select('Max(a.id)')
             ->getQuery();
-            $maxidresult = $idrep ->getResult();
-            $maxid = ($maxidresult[0][1] + 1);
-            $mat.="~CA@s1si".$maxid;
-            $values = json_decode($request->getContent());
-            if(isset($values->username,$values->password)) {
-
-                $user = new User();
-                $user->setUsername($values->username);
-                $user->setPassword($passwordEncoder->encodePassword($user, $values->password));
+        $maxidresult = $idrep->getResult();
+        $maxid = ($maxidresult[0][1] + 1);
+        $mat .= "-CA@ssI" . $maxid;
+        $user = new User();
+            $form=$this->createForm(UserType::class, $user);
+            $form->handleRequest($request);
+            $datas=$request->request->all();
+            $file=$request->files->all()['imageFile'];
+            $form->submit($datas); 
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $form->get('password')->getData()
+                    ));
                 $user->setRoles(["ROLE_CAISSIER"]);
-                $user->setStatut("Debloquer");
-                $errors = $validator->validate($user);
+                $user->setStatut("debloquer");
+                $user->setImageFile($file);
+                $user->setUpdatedAt(new \DateTime('now'));
+                $entityManager=$this->getDoctrine()->getManager();
+               $entityManager->persist($user);
+               $entityManager->flush();
 
             $caissier = new Caissier();
-            
-                $caissier->setNom($values->nom);
-                $caissier->setPrenom($values->prenom);
-                $caissier->setMatricule($mat);
-                $caissier->setAdresse($values->adresse);
-                $caissier->setEmail($values->email);
-                $caissier->setContact($values->contact);
-                $caissier->setCni($values->cni);
-                $caissier->setRole("Caissier");
-                $caissier->setAuthent($user);
-        
-            
-                if(count($errors)) {
-                    $errors = $serializer->serialize($errors, 'json');
-                    return new Response($errors, 500, [
-                        'Content-Type' => 'application/json'
-                    ]);
-                }
-                $entityManager->persist($user);
-                $entityManager->persist($caissier);
-                $entityManager->flush();
-    
-                $data = [
-                    'status' => 201,
-                    'message' => 'Le caisssier a été créé'
-                ];
-    
-                return new JsonResponse($data, 201);
-            }
-            $data = [
-                'status' => 500,
-                'message' => 'pas insertion!!!'
-            ];
-            return new JsonResponse($data, 500);
+            $form = $this->createForm(CaissierType::class, $caissier);
+            $form->handleRequest($request);
+            $data = $request->request->all();
+            $form->submit($data);
+            $caissier->setMatricule($mat); 
+            $caissier->setRole("caissier");
+            $entityManager=$this->getDoctrine()->getManager();
+            $entityManager->persist($caissier);
+            $entityManager->flush(); 
+
+            return new Response('Inserré',Response::HTTP_CREATED);
     }
 
     /**
@@ -128,4 +120,7 @@ class CaissierController extends AbstractController
 
         return $this->redirectToRoute('caissier_index');
     }
+
+
+    
 }

@@ -268,6 +268,6 @@ class __TwigTemplate_93ac5afa26d914b9c222be185214e6f4bb1ce348c9d0367e9faba71c60b
 
     <a href=\"{{ path('caissier_new') }}\">Create new</a>
 {% endblock %}
-", "caissier/index.html.twig", "/home/nabienne/Bureau/symfony/transacton/templates/caissier/index.html.twig");
+", "caissier/index.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/templates/caissier/index.html.twig");
     }
 }
