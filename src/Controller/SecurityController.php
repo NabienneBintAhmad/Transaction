@@ -78,31 +78,42 @@ class SecurityController extends AbstractFOSRestController
                 $user->setStatut("debloquer");
                 $user->setImageFile($file);
                 $user->setUpdatedAt(new \DateTime('now'));
+                $entityManager=$this->getDoctrine()->getManager();
                $entityManager->persist($user);
                $entityManager->flush();
             
             $admin = new Admin();
-            if(!$admin->getAuthent()())
-            {
-                $notfound = [
-                    'status' => 404,
-                    'message' => 'Ce user est pas trouvé'
-                ];
-    
-                return new JsonResponse($notfound, 404);    
-            }
+          
             $form = $this->createForm(AdminTpeType::class, $admin);
             $form->handleRequest($request);
             $data = $request->request->all();
             $form->submit($data);
             $admin->setMatricule($mat); 
             $admin->setRole("Admin");
+            if(!$admin->getAuthent())
+            {
+                $notfound = [
+                    'status' => 404,
+                    'message' => 'Ce user n\' est pas trouvé'
+                ];
+    
+                return new JsonResponse($notfound, 404);    
+            }
             $entityManager=$this->getDoctrine()->getManager();
             $entityManager->persist($admin);
            $entityManager->flush(); 
             
 
             $presta = new Prestataire();
+          
+            $form = $this->createForm(PrestqtqireType::class, $presta);
+            $form->handleRequest($request);
+            $data = $request->request->all();
+            $form->submit($data);
+           
+            $presta->setMatricule($mat1);
+            $presta->setCompte($compt);
+            $presta->setNinea($ninea);
             if(!$presta->getAdmin())
             {
                 $notfound = [
@@ -112,13 +123,6 @@ class SecurityController extends AbstractFOSRestController
     
                 return new JsonResponse($notfound, 404);    
             }
-            $form = $this->createForm(PrestqtqireType::class, $presta);
-            $form->handleRequest($request);
-            $data = $request->request->all();
-            $form->submit($data);
-            $presta->setMatricule($mat1);
-            $presta->setCompte($compt);
-            $presta->setNinea($ninea);
             $entityManager=$this->getDoctrine()->getManager();
             $entityManager->persist($presta);
             $entityManager->flush();  
@@ -133,12 +137,6 @@ class SecurityController extends AbstractFOSRestController
     
                 return new JsonResponse($notfound, 404);    
             }
-            $form = $this->createForm(CompteType::class, $compte);
-            $form->handleRequest($request);
-            $data = $request->request->all();
-            $form->submit($data);
-            $compte->setNumero($compt);
-            $compte->setSolde(0);
 
             $entityManager=$this->getDoctrine()->getManager();
             $entityManager->persist($compte);
@@ -150,6 +148,7 @@ class SecurityController extends AbstractFOSRestController
         
    /**
      * @Route("/compt", name="compt", methods={"POST"})
+     * @IsGranted("ROLE_SUPERADMIN")
      */
     public function compte(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -217,10 +216,6 @@ class SecurityController extends AbstractFOSRestController
     public function login(Request $request)
     {
         $user = $this->getUser();
-        return $this->json([
-            'username' => $user->getUsername(),
-            'roles' => $user->getRoles()
-        ]);
 
         if ("roles" == ["ROLE_USERLOCK"]) {
             $data = [
