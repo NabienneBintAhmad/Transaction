@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prestataire index{% endblock %}
+
+{% block body %}
+    <h1>Prestataire index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>NomEntreprise</th>
+                <th>Adresse</th>
+                <th>Contact</th>
+                <th>Cni</th>
+                <th>Email</th>
+                <th>Matricule</th>
+                <th>Compte</th>
+                <th>Ninea</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for prestataire in prestataires %}
+            <tr>
+                <td>{{ prestataire.id }}</td>
+                <td>{{ prestataire.nom }}</td>
+                <td>{{ prestataire.prenom }}</td>
+                <td>{{ prestataire.nomEntreprise }}</td>
+                <td>{{ prestataire.adresse }}</td>
+                <td>{{ prestataire.contact }}</td>
+                <td>{{ prestataire.cni }}</td>
+                <td>{{ prestataire.email }}</td>
+                <td>{{ prestataire.matricule }}</td>
+                <td>{{ prestataire.compte }}</td>
+                <td>{{ prestataire.ninea }}</td>
+                <td>
+                    <a href="{{ path('prestataire_show', {'id': prestataire.id}) }}">show</a>
+                    <a href="{{ path('prestataire_edit', {'id': prestataire.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('prestataire_new') }}">Create new</a>
+{% endblock %}

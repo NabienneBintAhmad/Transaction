@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prestataire{% endblock %}
+
+{% block body %}
+    <h1>Prestataire</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ prestataire.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ prestataire.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ prestataire.prenom }}</td>
+            </tr>
+            <tr>
+                <th>NomEntreprise</th>
+                <td>{{ prestataire.nomEntreprise }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ prestataire.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Contact</th>
+                <td>{{ prestataire.contact }}</td>
+            </tr>
+            <tr>
+                <th>Cni</th>
+                <td>{{ prestataire.cni }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ prestataire.email }}</td>
+            </tr>
+            <tr>
+                <th>Matricule</th>
+                <td>{{ prestataire.matricule }}</td>
+            </tr>
+            <tr>
+                <th>Compte</th>
+                <td>{{ prestataire.compte }}</td>
+            </tr>
+            <tr>
+                <th>Ninea</th>
+                <td>{{ prestataire.ninea }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('prestataire_index') }}">back to list</a>
+
+    <a href="{{ path('prestataire_edit', {'id': prestataire.id}) }}">edit</a>
+
+    {{ include('prestataire/_delete_form.html.twig') }}
+{% endblock %}

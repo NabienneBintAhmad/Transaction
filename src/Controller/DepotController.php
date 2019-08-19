@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Depot;
 use App\Entity\Compte;
 use App\Form\DepotType;
@@ -18,6 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -26,7 +28,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class DepotController extends AbstractController
 {
     /**
-     * @Route("/", name="depot_index", methods={"GET"})
+     * @Route("/j", name="depot_index", methods={"GET"})
      */
     public function index(DepotRepository $depotRepository): Response
     {
@@ -41,6 +43,7 @@ class DepotController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $entityManager):Response
     {
+       
         $values = json_decode($request->getContent());
         $depot= new Depot();
         $form = $this->createForm(DepotType::class, $depot);
@@ -64,7 +67,10 @@ class DepotController extends AbstractController
                 return new JsonResponse($notfound, 404);    
             }
             $compte->setSolde($compte->getSolde() + $values->montant);
-            $caissier = $this->getDoctrine()->getRepository(Caissier::class)->find($values->caissier);
+
+          $caissier = $this->getDoctrine()->getRepository(Caissier::class)->find($values->caissier);
+           //$caissier=$this->getUser();
+           //var_dump($caissier); die();
             $depot->setCaissier($caissier);
             if(!$depot->getCaissier())
             {
@@ -95,6 +101,7 @@ class DepotController extends AbstractController
 
     /**
      * @Route("/{id}", name="depot_show", methods={"GET"})
+     *  //@ParamConverter("depot", class="SensioBlogBundle:Depot")
      */
     public function show(Depot $depot): Response
     {

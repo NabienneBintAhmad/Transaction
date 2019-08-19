@@ -9,6 +9,7 @@ use App\Entity\Prestataire;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Entity\Compte;
 
 class UserPrestataireType extends AbstractType
 {
@@ -24,11 +25,15 @@ class UserPrestataireType extends AbstractType
             ->add('matriculeEntreprise',EntityType::class,[
                 'class'=> Prestataire::class,
                 'choice_label'=> 'entreprise_id'
-                ])
-            ->add('authent',EntityType::class,[
+                ]) 
+          /*   ->add('authent',EntityType::class,[
                 'class'=> User::class,
                 'choice_label'=> 'authent_id'
-                ])
+                ]) */
+           ->add('CompteDeTravail',EntityType::class,[
+                'class'=> Compte::class,
+                'choice_label'=> 'CompteDeTravailcompte_id'
+                    ]) 
         ;
     }
 

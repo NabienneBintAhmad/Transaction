@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\CaissierRepository")
+ *@UniqueEntity(fields={"email","matricule","contact"}, message="Cet utilisateur existe déjà")
  */
 class Caissier
 {

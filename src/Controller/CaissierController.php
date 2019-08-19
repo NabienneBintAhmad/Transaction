@@ -7,6 +7,7 @@ use App\Entity\Compte;
 use App\Form\UserType;
 use App\Entity\Caissier;
 use App\Form\CompteType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use App\Form\CaissierType;;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +33,7 @@ class CaissierController extends AbstractController
     /**
      * @Route("/caissier", name="caisssier", methods={"POST","GET"})
      * @IsGranted("ROLE_SUPERADMIN")
+     *  @ParamConverter("caissier", options={"mapping"={"caissier"="new"}})
      */
 
 
@@ -64,12 +66,23 @@ class CaissierController extends AbstractController
                $entityManager->flush();
 
             $caissier = new Caissier();
+            
             $form = $this->createForm(CaissierType::class, $caissier);
             $form->handleRequest($request);
             $data = $request->request->all();
             $form->submit($data);
+            $caissier->setAuthent($user);
             $caissier->setMatricule($mat); 
             $caissier->setRole("caissier");
+            if(!$caissier->getAuthent())
+            {
+                $notfound = [
+                    'status' => 404,
+                    'message' => 'Ce user est pas trouvé'
+                ];
+    
+                return new JsonResponse($notfound, 404);    
+            }
             $entityManager=$this->getDoctrine()->getManager();
             $entityManager->persist($caissier);
             $entityManager->flush(); 
@@ -79,6 +92,7 @@ class CaissierController extends AbstractController
 
     /**
      * @Route("/{id}", name="caissier_show", methods={"GET"})
+     * @ParamConverter("caissier", options={"mapping"={"id"="id"}})
      */
     public function show(Caissier $caissier): Response
     {
@@ -108,7 +122,8 @@ class CaissierController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="caissier_delete", methods={"DELETE"})
+     * @Route("//{id}", name="caissier_delete", methods={"DELETE"})
+     *  @ParamConverter("caissier", options={"mapping"={"id"="delete"}})
      */
     public function delete(Request $request, Caissier $caissier): Response
     {

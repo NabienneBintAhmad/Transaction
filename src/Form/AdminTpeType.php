@@ -20,10 +20,10 @@ class AdminTpeType extends AbstractType
             ->add('email')
             ->add('contact')
             ->add('cni')
-            ->add('authent',EntityType::class,[
+          /*   ->add('authent',EntityType::class,[
                 'class'=> User::class,
                 'choice_label'=> 'authent_id'
-                ])
+                ]) */
         ;
     }
 

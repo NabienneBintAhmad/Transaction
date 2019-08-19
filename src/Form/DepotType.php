@@ -17,14 +17,14 @@ class DepotType extends AbstractType
         $builder
           /*   ->add('montant') */
            /*  ->add('date') */
-            ->add('caissier', EntityType::class,[
+           /*  ->add('caissier', EntityType::class,[
                 'class'=> Caissier::class,
                 'choice_label'=> 'caissier_id'
-                ])
-          ->add('compte',EntityType::class,[
+                ]) */
+           /* ->add('compte',EntityType::class,[
                 'class'=> Compte::class,
                 'choice_label'=> 'compte_id'
-                ]) 
+                ]) */
         ;
     }
 

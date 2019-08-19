@@ -14,11 +14,11 @@ class CompteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-    
-          /*   ->add('proprietaire',EntityType::class,[
+    /* 
+            ->add('proprietaire',EntityType::class,[
                 'class'=> Prestataire::class,
                 'choice_label'=> 'proprietaire'
-                ]) */
+                ])  */
         ;
     }
 

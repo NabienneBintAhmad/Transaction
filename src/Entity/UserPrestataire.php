@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -63,6 +65,22 @@ class UserPrestataire
      * @ORM\Column(type="string", length=255)
      */
     private $matricule;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="userPrestataires")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $compteDeTravail;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="multiservice")
+     */
+    private $transactions;
+
+    public function __construct()
+    {
+        $this->transactions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -173,6 +191,49 @@ class UserPrestataire
     public function setMatricule(string $matricule): self
     {
         $this->matricule = $matricule;
+
+        return $this;
+    }
+
+    public function getCompteDeTravail(): ?Compte
+    {
+        return $this->compteDeTravail;
+    }
+
+    public function setCompteDeTravail(?Compte $compteDeTravail): self
+    {
+        $this->compteDeTravail = $compteDeTravail;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Transaction[]
+     */
+    public function getTransactions(): Collection
+    {
+        return $this->transactions;
+    }
+
+    public function addTransaction(Transaction $transaction): self
+    {
+        if (!$this->transactions->contains($transaction)) {
+            $this->transactions[] = $transaction;
+            $transaction->setMultiservice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTransaction(Transaction $transaction): self
+    {
+        if ($this->transactions->contains($transaction)) {
+            $this->transactions->removeElement($transaction);
+            // set the owning side to null (unless already changed)
+            if ($transaction->getMultiservice() === $this) {
+                $transaction->setMultiservice(null);
+            }
+        }
 
         return $this;
     }

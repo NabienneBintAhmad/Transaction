@@ -9,6 +9,12 @@ use App\Entity\Compte;
 use App\Form\UserType;
 use App\Form\ImageType;
 use App\Entity\Caissier;
+use App\Exception\AccountDeletedException;
+use App\Security\User as AppUser;
+use Symfony\Component\Security\Core\Exception\AccountExpiredException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use App\Form\CompteType;
 use App\Form\AdminTpeType;
 use App\Form\CaissierType;
@@ -30,6 +36,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -88,6 +95,7 @@ class SecurityController extends AbstractFOSRestController
             $form->handleRequest($request);
             $data = $request->request->all();
             $form->submit($data);
+            $admin->setAuthent($user);
             $admin->setMatricule($mat); 
             $admin->setRole("Admin");
             if(!$admin->getAuthent())
@@ -110,7 +118,7 @@ class SecurityController extends AbstractFOSRestController
             $form->handleRequest($request);
             $data = $request->request->all();
             $form->submit($data);
-           
+            $presta->setAdmin($admin);
             $presta->setMatricule($mat1);
             $presta->setCompte($compt);
             $presta->setNinea($ninea);
@@ -128,7 +136,15 @@ class SecurityController extends AbstractFOSRestController
             $entityManager->flush();  
 
             $compte = new Compte();
-            if(!$compte->getProprietaire()())
+           
+            $form = $this->createForm(CompteType::class, $compte);
+            $form->handleRequest($request);
+            $data = $request->request->all();
+            $form->submit($data);
+            $compte->setProprietaire($presta);
+            $compte->setNumero($compt);
+            $compte->setSolde(0);
+            if(!$compte->getProprietaire())
             {
                 $notfound = [
                     'status' => 404,
@@ -166,10 +182,7 @@ class SecurityController extends AbstractFOSRestController
         $compte->setSolde(0);
         $proprietaire = $this->getDoctrine()->getRepository(Prestataire::class)->findOneBy(['nomEntreprise'=>$values->nomEntreprise]);
         $compte->setProprietaire($proprietaire);
-        // var_dump($proprietaire);die();
-        // if($proprietaire)
-        // {   
-
+  
             if(!$compte->getProprietaire())
             {
                 $notfound = [
@@ -189,7 +202,7 @@ class SecurityController extends AbstractFOSRestController
   }
 
     /**
-     * @Route("/register/bloquer", name="bloquer", methods={"POST","GET"})
+      * @Route("/bloquer", name="bloquer", methods={"POST"})
      * @IsGranted("ROLE_SUPERADMIN")
      */
 
@@ -198,31 +211,118 @@ class SecurityController extends AbstractFOSRestController
         $values = json_decode($request->getContent());
         $user = new User();
         $user = $userRepository->findOneByusername($values->username);
-        $user->setRoles(["ROLE_USERLOCK"]);
+        if(!$user)
+        {
+            throw $this->createNotFoundException('User Not Found');
+        }
+       // $user->setRoles(["ROLE_USERLOCK"]);
         $user->SetStatut("Bloquer");
         $entityManager->flush();
+       
         $data = [
             'status' => 201,
             'message' => 'L\'utilisateur a été bloqué'
         ];
         return new JsonResponse($data);
+       
     }
 
 
     /**
-     * @Route("/login", name="login", methods={"POST"})
-     * //@IsGranted("ROLE_USERLOCK")
+      * @Route("/debloquer", name="debloquer", methods={"POST"})
+     * @IsGranted("ROLE_SUPERADMIN")
      */
-    public function login(Request $request)
-    {
-        $user = $this->getUser();
 
-        if ("roles" == ["ROLE_USERLOCK"]) {
-            $data = [
-                'status' => 500,
-                'message' => 'Vous etes bloqué!!!'
-            ];
-            return new JsonResponse($data, 500);
+    public function debloquer(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository)
+    {
+        $values = json_decode($request->getContent());
+        $user = new User();
+        $user = $userRepository->findOneByusername($values->username);
+        if(!$user)
+        {
+            throw $this->createNotFoundException('User Not Found');
+        }
+        $user->SetStatut("Debloquer");
+        $entityManager->flush();
+       
+        $data = [
+            'status' => 201,
+            'message' => 'L\'utilisateur a été débloqué'
+        ];
+        return new JsonResponse($data);
+       
+    }
+
+
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
+    /**
+     * @Route("/login_check", name="login", methods={"POST"})
+     * @param JWTEncoderInterface $JWTEncoder
+     * @throws \Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException
+     */
+    public function login(Request $request,JWTEncoderInterface $JWTEncoder, UserRepository $userRepository)
+    {
+
+        $values = json_decode($request->getContent());
+        $user = new User();
+
+     /*  return $this->json([
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles()
+        ]);  */
+        $user = $userRepository->findOneByusername($values->username);
+        if(!$user)
+        {
+            throw $this->createNotFoundException('User Not Found');
+        }
+        $isValid = $this->passwordEncoder->isPasswordValid($user, $values->password);
+        if(!$isValid )
+        {
+            throw $this->createNotFoundException('Mot de passe incorrecte');
+        }
+    if ($user->getStatut()=="Bloquer") {
+        throw $this->createNotFoundException('Accès refusé !!! Vous etes bloqué!!!');
+    }
+    $token = $JWTEncoder->encode([
+        'username' => $user->getUsername(),
+        'exp' => time() + 86400 // 1 day expiration
+    ]);
+
+    return $this->json([
+        'token' => $token
+    ]);
+
+
+    }
+
+
+   /*  public function checkPreAuth(UserInterface $user)
+    {
+        if (!$user instanceof AppUser) {
+            return;
+        }
+
+        // user is deleted, show a generic Account Not Found message.
+        if ($user->isDeleted()) {
+            throw new AccountDeletedException();
         }
     }
+
+    public function checkPostAuth(UserInterface $user)
+    {
+        if (!$user instanceof AppUser) {
+            return;
+        }
+
+        // user account is expired, the user may be notified
+        if ($user->isExpired()) {
+            throw new AccountExpiredException('...');
+        }
+    } */
 }
