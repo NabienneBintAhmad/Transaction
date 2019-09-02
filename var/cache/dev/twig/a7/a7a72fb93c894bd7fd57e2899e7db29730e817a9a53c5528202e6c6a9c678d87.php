@@ -154,6 +154,6 @@ class __TwigTemplate_42d68ab6ccdb4856ffcf1c9e197061f0ed9bed5659d13f3e74e400ae4f7
     </ul>
 </div>
 {% endblock %}
-", "se_security/index.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/templates/se_security/index.html.twig");
+", "se_security/index.html.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/templates/se_security/index.html.twig");
     }
 }

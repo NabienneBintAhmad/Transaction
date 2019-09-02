@@ -69,6 +69,6 @@ class __TwigTemplate_2056961232db9e5984abe18aceec2e9031a9eb1ef26207dc40de7deb616
     public function getSourceContext()
     {
         return new Source("{{ include('@Twig/Exception/exception.xml.twig', { exception: exception }) }}
-", "@Twig/Exception/exception.rdf.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/exception.rdf.twig");
+", "@Twig/Exception/exception.rdf.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/exception.rdf.twig");
     }
 }

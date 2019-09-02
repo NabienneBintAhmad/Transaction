@@ -39,7 +39,7 @@ class DepotController extends AbstractController
 
     /**
      * @Route("/depot", name="depot", methods={"GET","POST"})
-     * @IsGranted("ROLE_CAISSIER")
+     * //@IsGranted("ROLE_CAISSIER")
      */
     public function new(Request $request, EntityManagerInterface $entityManager):Response
     {
@@ -52,9 +52,10 @@ class DepotController extends AbstractController
                 $form->submit($data);
  
             $depot->setDate(new \DateTime());
-            $depot->setMontant($values->montant);
+           
+           //$depot->setMontant($values->montant);
 
-            $compte = $this->getDoctrine()->getRepository(Compte::class)->find($values->compte);
+            $compte = $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['numero'=>$data]);
            
             $depot->setCompte($compte);
             if(!$depot->getCompte())
@@ -66,11 +67,11 @@ class DepotController extends AbstractController
     
                 return new JsonResponse($notfound, 404);    
             }
-            $compte->setSolde($compte->getSolde() + $values->montant);
+            $compte->setSolde($compte->getSolde() + $depot->getMontant());
 
-          $caissier = $this->getDoctrine()->getRepository(Caissier::class)->find($values->caissier);
+          $caissier =$this->getDoctrine()->getRepository(Caissier::class)->findOneBy(['matricule'=>$data]);
            //$caissier=$this->getUser();
-           //var_dump($caissier); die();
+           //var_dump($compte); die();
             $depot->setCaissier($caissier);
             if(!$depot->getCaissier())
             {
@@ -82,7 +83,7 @@ class DepotController extends AbstractController
                 return new JsonResponse($notfound, 404);    
             }
 
-            if($values->montant<75000)
+            if($depot->getMontant()<75000)
             {
 
                 $petit = [

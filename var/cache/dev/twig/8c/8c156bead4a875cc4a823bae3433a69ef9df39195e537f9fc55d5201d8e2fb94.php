@@ -83,6 +83,6 @@ class __TwigTemplate_dd027d2c87f4d36c7cd42ee20915c85be4fb44659d0dd05ff0f77f679da
         <?php echo \$view['form']->help(\$form); ?>
     </td>
 </tr>
-", "@Framework/FormTable/form_row.html.php", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/framework-bundle/Resources/views/FormTable/form_row.html.php");
+", "@Framework/FormTable/form_row.html.php", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/framework-bundle/Resources/views/FormTable/form_row.html.php");
     }
 }

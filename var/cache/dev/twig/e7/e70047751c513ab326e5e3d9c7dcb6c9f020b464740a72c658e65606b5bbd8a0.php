@@ -79,6 +79,6 @@ class __TwigTemplate_78882bcd0e837a437ba8c5076c8d6db3afb46deea808981b945ca97148a
         return new Source("<?xml version=\"1.0\" encoding=\"{{ _charset }}\" ?>
 
 <error code=\"{{ status_code }}\" message=\"{{ status_text }}\" />
-", "@Twig/Exception/error.xml.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/error.xml.twig");
+", "@Twig/Exception/error.xml.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/error.xml.twig");
     }
 }

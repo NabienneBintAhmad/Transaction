@@ -60,6 +60,17 @@ class Transaction
      */
     private $multiservice;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Tarif", inversedBy="transactions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $commission;
+
+    /**
+     * @ORM\Column(type="bigint")
+     */
+    private $code;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -157,6 +168,30 @@ class Transaction
     public function setMultiservice(?UserPrestataire $multiservice): self
     {
         $this->multiservice = $multiservice;
+
+        return $this;
+    }
+
+    public function getCommission(): ?Tarif
+    {
+        return $this->commission;
+    }
+
+    public function setCommission(?Tarif $commission): self
+    {
+        $this->commission = $commission;
+
+        return $this;
+    }
+
+    public function getCode(): ?int
+    {
+        return $this->code;
+    }
+
+    public function setCode(int $code): self
+    {
+        $this->code = $code;
 
         return $this;
     }

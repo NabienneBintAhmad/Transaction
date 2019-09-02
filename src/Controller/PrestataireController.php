@@ -20,11 +20,37 @@ class PrestataireController extends AbstractController
     /**
      * @Route("/", name="prestataire_index", methods={"GET"})
      */
-    public function index(PrestataireRepository $prestataireRepository): Response
+    public function index(PrestataireRepository $prestataireRepository)
     {
-        return $this->render('prestataire/index.html.twig', [
-            'prestataires' => $prestataireRepository->findAll(),
+
+         // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+        
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('prestataire/contratpresta.html.twig', [
+            'prestataire' => $prestataireRepository->findAll()
         ]);
+        
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+        
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (inline view)
+        $dompdf->stream("contratpresta.pdf", [
+            "Attachment" => false
+        ]);
+       /*  return $this->render('prestataire/index.html.twig', [
+            'prestataires' => $prestataireRepository->findAll(),
+        ]); */
     }
 
     /**
@@ -68,6 +94,7 @@ class PrestataireController extends AbstractController
         $form = $this->createForm(PrestataireType::class, $prestataire);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
@@ -95,7 +122,7 @@ class PrestataireController extends AbstractController
     }
 
     /**
-     * @Route("/contrat", name="prestataire_contrat", methods={"GET"})
+     * @Route("/", name="contrat", methods={"GET"})
      */
     public function contrat(PrestataireRepository $prestataireRepository)
     {

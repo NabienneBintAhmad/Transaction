@@ -133,6 +133,6 @@ class __TwigTemplate_436dd834ec14532c08322c00938731e3aa5925b80fc2a31adee8b968ce4
 
     <a href=\"{{ path('depot_index') }}\">back to list</a>
 {% endblock %}
-", "depot/new.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/templates/depot/new.html.twig");
+", "depot/new.html.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/templates/depot/new.html.twig");
     }
 }

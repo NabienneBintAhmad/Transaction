@@ -22,17 +22,17 @@ class UserPrestataireType extends AbstractType
             ->add('email')
             ->add('adresse')
             ->add('cni')
-            ->add('matriculeEntreprise',EntityType::class,[
+             ->add('matriculeEntreprise',EntityType::class,[
                 'class'=> Prestataire::class,
-                'choice_label'=> 'entreprise_id'
-                ]) 
+                'choice_label'=> 'matriculeEntreprise_id'
+                ])  
           /*   ->add('authent',EntityType::class,[
                 'class'=> User::class,
                 'choice_label'=> 'authent_id'
                 ]) */
-           ->add('CompteDeTravail',EntityType::class,[
+           ->add('Compte',EntityType::class,[
                 'class'=> Compte::class,
-                'choice_label'=> 'CompteDeTravailcompte_id'
+                'choice_label'=> 'Compte_id'
                     ]) 
         ;
     }

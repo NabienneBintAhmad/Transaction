@@ -59,6 +59,6 @@ class __TwigTemplate_af3e5bdc33c8867a7951b524767fcc4de4d6d569afe0f53cde0b8d93225
 
     public function getSourceContext()
     {
-        return new Source("", "@Framework/Form/button_label.html.php", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/framework-bundle/Resources/views/Form/button_label.html.php");
+        return new Source("", "@Framework/Form/button_label.html.php", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/framework-bundle/Resources/views/Form/button_label.html.php");
     }
 }

@@ -75,6 +75,6 @@ class __TwigTemplate_e33b9add64f41e2aa58c6492846e1e7340e3dfa1af8b206b5fcc426140f
     <?php echo \$view['form']->widget(\$form, \$widgetAttr); ?>
     <?php echo \$view['form']->help(\$form); ?>
 </div>
-", "@Framework/Form/form_row.html.php", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/framework-bundle/Resources/views/Form/form_row.html.php");
+", "@Framework/Form/form_row.html.php", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/framework-bundle/Resources/views/Form/form_row.html.php");
     }
 }

@@ -135,6 +135,6 @@ class __TwigTemplate_8d42318d46cf6a20fe2b532b1a03eb1c692ebd77e165bbb4df4a8bc9675
         {% endfor %}
     </tbody>
 </table>
-", "@WebProfiler/Profiler/bag.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/bag.html.twig");
+", "@WebProfiler/Profiler/bag.html.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/bag.html.twig");
     }
 }

@@ -2080,6 +2080,6 @@ class __TwigTemplate_93d76a981679af1582d2e70e6478df3d59a295b4dd9a99c225eb27a1a1d
         {{ tree.form_tree_details(childName, childData, forms_by_hash) }}
     {% endfor %}
 {% endmacro %}
-", "@WebProfiler/Collector/form.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/web-profiler-bundle/Resources/views/Collector/form.html.twig");
+", "@WebProfiler/Collector/form.html.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/web-profiler-bundle/Resources/views/Collector/form.html.twig");
     }
 }

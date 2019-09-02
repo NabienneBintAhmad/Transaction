@@ -1828,6 +1828,6 @@ class __TwigTemplate_6ef204bebb1ae1d3eb3406be3b571adf3cc79f610f9da95a6af8d39843a
         </tbody>
     </table>
 {% endmacro %}
-", "@Doctrine/Collector/db.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/doctrine/doctrine-bundle/Resources/views/Collector/db.html.twig");
+", "@Doctrine/Collector/db.html.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/doctrine/doctrine-bundle/Resources/views/Collector/db.html.twig");
     }
 }

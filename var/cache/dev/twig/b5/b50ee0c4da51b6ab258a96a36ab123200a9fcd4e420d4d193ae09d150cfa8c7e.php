@@ -268,6 +268,6 @@ class __TwigTemplate_8b7740d2b69174dd8b92faa6f044a03fd8a6ff7c565973b3bd68ae5f058
     {%- set label = label|trans|default(label) -%}
     {{- block('form_label') -}}
 {%- endblock -%}
-", "@VichUploader/Form/fields.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/vich/uploader-bundle/Resources/views/Form/fields.html.twig");
+", "@VichUploader/Form/fields.html.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/vich/uploader-bundle/Resources/views/Form/fields.html.twig");
     }
 }

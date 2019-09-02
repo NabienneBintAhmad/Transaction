@@ -32,8 +32,7 @@ class CaissierController extends AbstractController
       
     /**
      * @Route("/caissier", name="caisssier", methods={"POST","GET"})
-     * @IsGranted("ROLE_SUPERADMIN")
-     *  @ParamConverter("caissier", options={"mapping"={"caissier"="new"}})
+     * //@IsGranted("ROLE_SUPERADMIN")
      */
 
 
@@ -92,7 +91,6 @@ class CaissierController extends AbstractController
 
     /**
      * @Route("/{id}", name="caissier_show", methods={"GET"})
-     * @ParamConverter("caissier", options={"mapping"={"id"="id"}})
      */
     public function show(Caissier $caissier): Response
     {

@@ -46,10 +46,59 @@ class SecurityController extends AbstractFOSRestController
 {
 
 
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
+    /**
+     * @Route("/login_check", name="login",methods={"POST"})
+     * @param Request $request
+     * @param JWTEncoderInterface $JWTEncoder
+     * @return JsonResponse
+     * @throws \Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException
+     */
+    public function login(Request $request,JWTEncoderInterface $JWTEncoder, UserRepository $userRepository)
+    {
+
+        $values = json_decode($request->getContent());
+        $user = new User();
+
+       /*    return $this->json([
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles()
+        ]);  */ 
+        $user = $userRepository->findOneByusername($values->username);
+        if(!$user)
+        {
+            throw $this->createNotFoundException('User Not Found');
+        }
+        $isValid = $this->passwordEncoder->isPasswordValid($user, $values->password);
+        if(!$isValid )
+        {
+            throw $this->createNotFoundException('Mot de passe incorrecte');
+        }
+    if ($user->getStatut()=="Bloquer") {
+        throw $this->createNotFoundException('Accès refusé !!! Vous etes bloqué!!!');
+    }
+    $token = $JWTEncoder->encode([
+        'username' => $user->getUsername(),
+        'roles' => $user->getRoles(),
+        'exp' => time() + 86400 // 1 day expiration
+    ]);
+
+    return $this->json([
+        'token' => $token
+    ]);
+
+
+    }
 
     /**
      * @Route("/register", name="register", methods={"POST"})
-     * @IsGranted("ROLE_SUPERADMIN")
+     * //@IsGranted("ROLE_SUPERADMIN")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator):Response
     {
@@ -81,13 +130,11 @@ class SecurityController extends AbstractFOSRestController
                         $user,
                         $form->get('password')->getData()
                     ));
-                $user->setRoles(["ROLE_ADMIN"]);
+                $user->setRoles(['ROLE_ADMIN']);
                 $user->setStatut("debloquer");
                 $user->setImageFile($file);
                 $user->setUpdatedAt(new \DateTime('now'));
-                $entityManager=$this->getDoctrine()->getManager();
-               $entityManager->persist($user);
-               $entityManager->flush();
+            
             
             $admin = new Admin();
           
@@ -107,10 +154,9 @@ class SecurityController extends AbstractFOSRestController
     
                 return new JsonResponse($notfound, 404);    
             }
-            $entityManager=$this->getDoctrine()->getManager();
-            $entityManager->persist($admin);
-           $entityManager->flush(); 
+     
             
+
 
             $presta = new Prestataire();
           
@@ -131,9 +177,9 @@ class SecurityController extends AbstractFOSRestController
     
                 return new JsonResponse($notfound, 404);    
             }
-            $entityManager=$this->getDoctrine()->getManager();
-            $entityManager->persist($presta);
-            $entityManager->flush();  
+           
+           
+          
 
             $compte = new Compte();
            
@@ -153,8 +199,12 @@ class SecurityController extends AbstractFOSRestController
     
                 return new JsonResponse($notfound, 404);    
             }
-
+      
+            
             $entityManager=$this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->persist($admin);
+            $entityManager->persist($presta);
             $entityManager->persist($compte);
             $entityManager->flush();
 
@@ -164,7 +214,7 @@ class SecurityController extends AbstractFOSRestController
         
    /**
      * @Route("/compt", name="compt", methods={"POST"})
-     * @IsGranted("ROLE_SUPERADMIN")
+     * //@IsGranted("ROLE_SUPERADMIN")
      */
     public function compte(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -180,7 +230,7 @@ class SecurityController extends AbstractFOSRestController
        
         $compte->setNumero($compt);
         $compte->setSolde(0);
-        $proprietaire = $this->getDoctrine()->getRepository(Prestataire::class)->findOneBy(['nomEntreprise'=>$values->nomEntreprise]);
+        $proprietaire = $this->getDoctrine()->getRepository(Prestataire::class)->findOneBy(['matricule'=>$data]);
         $compte->setProprietaire($proprietaire);
   
             if(!$compte->getProprietaire())
@@ -203,19 +253,23 @@ class SecurityController extends AbstractFOSRestController
 
     /**
       * @Route("/bloquer", name="bloquer", methods={"POST"})
-     * @IsGranted("ROLE_SUPERADMIN")
+     * //@IsGranted("ROLE_SUPERADMIN")
      */
 
     public function bloquer(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository)
     {
         $values = json_decode($request->getContent());
         $user = new User();
-        $user = $userRepository->findOneByusername($values->username);
+        $form=$this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        $datas=$request->request->all();
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=>$datas]);
+ 
+        //$user = $userRepository->findOneBy(['username'=>$values]);
         if(!$user)
         {
             throw $this->createNotFoundException('User Not Found');
         }
-       // $user->setRoles(["ROLE_USERLOCK"]);
         $user->SetStatut("Bloquer");
         $entityManager->flush();
        
@@ -230,7 +284,7 @@ class SecurityController extends AbstractFOSRestController
 
     /**
       * @Route("/debloquer", name="debloquer", methods={"POST"})
-     * @IsGranted("ROLE_SUPERADMIN")
+     * //@IsGranted("ROLE_SUPERADMIN")
      */
 
     public function debloquer(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository)
@@ -254,52 +308,6 @@ class SecurityController extends AbstractFOSRestController
     }
 
 
-    private $passwordEncoder;
-
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $this->passwordEncoder = $passwordEncoder;
-    }
-
-    /**
-     * @Route("/login_check", name="login", methods={"POST"})
-     * @param JWTEncoderInterface $JWTEncoder
-     * @throws \Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException
-     */
-    public function login(Request $request,JWTEncoderInterface $JWTEncoder, UserRepository $userRepository)
-    {
-
-        $values = json_decode($request->getContent());
-        $user = new User();
-
-     /*  return $this->json([
-            'username' => $user->getUsername(),
-            'roles' => $user->getRoles()
-        ]);  */
-        $user = $userRepository->findOneByusername($values->username);
-        if(!$user)
-        {
-            throw $this->createNotFoundException('User Not Found');
-        }
-        $isValid = $this->passwordEncoder->isPasswordValid($user, $values->password);
-        if(!$isValid )
-        {
-            throw $this->createNotFoundException('Mot de passe incorrecte');
-        }
-    if ($user->getStatut()=="Bloquer") {
-        throw $this->createNotFoundException('Accès refusé !!! Vous etes bloqué!!!');
-    }
-    $token = $JWTEncoder->encode([
-        'username' => $user->getUsername(),
-        'exp' => time() + 86400 // 1 day expiration
-    ]);
-
-    return $this->json([
-        'token' => $token
-    ]);
-
-
-    }
 
 
    /*  public function checkPreAuth(UserInterface $user)

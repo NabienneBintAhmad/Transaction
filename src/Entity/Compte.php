@@ -42,16 +42,16 @@ class Compte
     private $depots;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UserPrestataire", mappedBy="compteDeTravail")
+     * @ORM\OneToMany(targetEntity="App\Entity\UserPrestataire", mappedBy="compte")
      */
     private $userPrestataires;
 
     public function __construct()
     {
-        $this->depots = new ArrayCollection();
         $this->userPrestataires = new ArrayCollection();
     }
 
+   
     public function getId(): ?int
     {
         return $this->id;
@@ -136,7 +136,7 @@ class Compte
     {
         if (!$this->userPrestataires->contains($userPrestataire)) {
             $this->userPrestataires[] = $userPrestataire;
-            $userPrestataire->setCompteDeTravail($this);
+            $userPrestataire->setCompte($this);
         }
 
         return $this;
@@ -147,11 +147,13 @@ class Compte
         if ($this->userPrestataires->contains($userPrestataire)) {
             $this->userPrestataires->removeElement($userPrestataire);
             // set the owning side to null (unless already changed)
-            if ($userPrestataire->getCompteDeTravail() === $this) {
-                $userPrestataire->setCompteDeTravail(null);
+            if ($userPrestataire->getCompte() === $this) {
+                $userPrestataire->setCompte(null);
             }
         }
 
         return $this;
     }
+
+   
 }

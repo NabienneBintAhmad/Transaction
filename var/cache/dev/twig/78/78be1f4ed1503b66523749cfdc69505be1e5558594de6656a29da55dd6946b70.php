@@ -212,6 +212,6 @@ class __TwigTemplate_9646828cacb9147d230c7cc14815da148dcaeaba0cf154fa2dfe833b378
 
     <a href=\"{{ path('depot_new') }}\">Create new</a>
 {% endblock %}
-", "depot/index.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/templates/depot/index.html.twig");
+", "depot/index.html.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/templates/depot/index.html.twig");
     }
 }

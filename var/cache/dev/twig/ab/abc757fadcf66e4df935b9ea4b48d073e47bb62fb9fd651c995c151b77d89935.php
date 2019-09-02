@@ -133,6 +133,6 @@ class __TwigTemplate_00eb19dd0589c14541ea36bd814d796beaf2da262276a438c4f3839e2f2
 
     <a href=\"{{ path('caissier_index') }}\">back to list</a>
 {% endblock %}
-", "caissier/new.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/templates/caissier/new.html.twig");
+", "caissier/new.html.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/templates/caissier/new.html.twig");
     }
 }

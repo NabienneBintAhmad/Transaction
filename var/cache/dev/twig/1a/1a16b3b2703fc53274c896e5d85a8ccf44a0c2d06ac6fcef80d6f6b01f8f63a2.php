@@ -108,6 +108,6 @@ class __TwigTemplate_edaa589cc94c8330e20fb99857c6bd841a61bdc06ff52f28846bfde828a
     </exception>
 {% endfor %}
 </error>
-", "@Twig/Exception/exception.xml.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/exception.xml.twig");
+", "@Twig/Exception/exception.xml.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/exception.xml.twig");
     }
 }

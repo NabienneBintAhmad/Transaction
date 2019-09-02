@@ -161,6 +161,6 @@ class __TwigTemplate_01464a5c37acd30c8fc92a5764a62073974912e97326b7adb9d19854bca
         </tr>
     </tbody>
 </table>
-", "@Twig/Exception/traces_text.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/traces_text.html.twig");
+", "@Twig/Exception/traces_text.html.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/twig-bundle/Resources/views/Exception/traces_text.html.twig");
     }
 }

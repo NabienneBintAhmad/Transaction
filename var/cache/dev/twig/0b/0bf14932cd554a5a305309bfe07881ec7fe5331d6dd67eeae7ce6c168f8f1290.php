@@ -122,6 +122,6 @@ class __TwigTemplate_44c8469f17739e7474ecf06a20c4f5e26725312cb4ed11f5850a46edcf3
         {% endfor %}
     </tbody>
 </table>
-", "@WebProfiler/Profiler/table.html.twig", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/table.html.twig");
+", "@WebProfiler/Profiler/table.html.twig", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/web-profiler-bundle/Resources/views/Profiler/table.html.twig");
     }
 }

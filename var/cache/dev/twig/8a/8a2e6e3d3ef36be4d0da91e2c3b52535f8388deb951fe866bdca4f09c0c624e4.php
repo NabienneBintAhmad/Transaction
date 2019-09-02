@@ -73,6 +73,6 @@ class __TwigTemplate_b32f22fc756a8bd78ad6555074f22bfe8f285bfebb264a74230f99272ab
         <?php echo \$view['form']->widget(\$form); ?>
     </td>
 </tr>
-", "@Framework/FormTable/button_row.html.php", "/home/nabienne/Bureau/symfony/transactionClone/Transaction/vendor/symfony/framework-bundle/Resources/views/FormTable/button_row.html.php");
+", "@Framework/FormTable/button_row.html.php", "/home/nabienne/Bureau/angular-symfony-app/Transaction/vendor/symfony/framework-bundle/Resources/views/FormTable/button_row.html.php");
     }
 }

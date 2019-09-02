@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Compte;
 use App\Form\UserType;
 use App\Entity\Prestataire;
+use App\Repository\PrestataireRepository;
 use App\Entity\UserPrestataire;
 use App\Form\UserPrestataireType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,6 +21,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\VarExporter\Internal\Values;
 
 /**
  * @Route("/api")
@@ -38,9 +40,9 @@ class UserPrestataireController extends AbstractController
 
     /**
      * @Route("/users", name="user_prestataire_new", methods={"GET","POST"})
-     * @IsGranted("ROLE_ADMIN")
+     * //@IsGranted("ROLE_ADMIN")
      */
-    public function new(Request $request,  UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager):Response
+    public function new(Request $request,  UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, PrestataireRepository $prestaRepository):Response
     {
         
         $values = json_decode($request->getContent());
@@ -66,9 +68,7 @@ class UserPrestataireController extends AbstractController
                     $user->setStatut("debloquer");
                     $user->setImageFile($file);
                     $user->setUpdatedAt(new \DateTime('now'));
-                    $entityManager=$this->getDoctrine()->getManager();
-                   $entityManager->persist($user);
-                   $entityManager->flush();
+
 
 
                 $userpresta = new UserPrestataire();
@@ -80,8 +80,11 @@ class UserPrestataireController extends AbstractController
                 $form->submit($data);
                 $userpresta->setMatricule($mat);
                 $userpresta->setAuthent($user);
-              /*   $compte = $this->getDoctrine()->getRepository(Compte::class)->find($values->getId());
-                $userpresta->setCompte($compte);  */
+               // $presta=$data['matriculeEntreprise'];
+                $prestataire = $this->getDoctrine()->getRepository(Prestataire::class)->findOneBy(['matricule'=>$data]);
+               // var_dump($prestataire);die();
+                $userpresta->setMatriculeEntreprise($prestataire);
+                
                 if(!$userpresta->getAuthent())
                 {
                     $notfound = [
@@ -101,7 +104,8 @@ class UserPrestataireController extends AbstractController
                     return new JsonResponse($notfound, 404);    
                 }
 
-               
+                $entityManager=$this->getDoctrine()->getManager();
+                $entityManager->persist($user);
                 $entityManager->persist($userpresta);
                $entityManager->flush(); 
 
@@ -133,7 +137,7 @@ class UserPrestataireController extends AbstractController
             throw $this->createNotFoundException('utilisateur non trouvé!!');
         }
     
-        $compte = $this->getDoctrine()->getRepository(Compte::class)->find($values->comptetravail);
+        $compte = $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['numero'=>$values->comptetravail]);
         if(!$compte)
         {
             throw $this->createNotFoundException('compte non trouvé!!');
