@@ -16,6 +16,9 @@ security:
             security: false
         main:
             anonymous: true
+            json_login:
+                 check_path: /api/login_check
+
 
             # activate different ways to authenticate
 

@@ -3339,6 +3339,7 @@
     </service>
     <service id="security.authentication.manager" class="Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager" public="false">
       <argument type="iterator">
+        <argument type="service" id="security.authentication.provider.dao.main"/>
         <argument type="service" id="security.authentication.provider.anonymous.main"/>
       </argument>
       <argument>true</argument>
@@ -3833,6 +3834,7 @@
       <argument>null</argument>
       <argument>null</argument>
       <argument type="collection">
+        <argument>json_login</argument>
         <argument>anonymous</argument>
       </argument>
       <argument>null</argument>
@@ -3846,6 +3848,34 @@
       <argument type="service" id="logger" on-invalid="null"/>
       <argument type="service" id="debug.event_dispatcher" on-invalid="null"/>
       <argument type="service" id="security.authentication.trust_resolver"/>
+    </service>
+    <service id="security.authentication.provider.dao.main" class="Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider" public="false">
+      <argument type="service" id="security.user.provider.concrete.app_user_provider"/>
+      <argument type="service" id="security.user_checker"/>
+      <argument>main</argument>
+      <argument type="service" id="security.encoder_factory.generic"/>
+      <argument>true</argument>
+    </service>
+    <service id="security.authentication.listener.json.main" class="Symfony\Component\Security\Http\Firewall\UsernamePasswordJsonAuthenticationListener" public="false">
+      <argument type="service" id="security.token_storage"/>
+      <argument type="service" id="security.authentication.manager"/>
+      <argument type="service" id="security.http_utils"/>
+      <argument>main</argument>
+      <argument>null</argument>
+      <argument>null</argument>
+      <argument type="collection">
+        <argument key="check_path">/api/login_check</argument>
+        <argument key="use_forward">false</argument>
+        <argument key="require_previous_session">false</argument>
+        <argument key="username_path">username</argument>
+        <argument key="password_path">password</argument>
+      </argument>
+      <argument type="service" id="logger" on-invalid="null"/>
+      <argument type="service" id="debug.event_dispatcher" on-invalid="null"/>
+      <argument type="service" id="property_accessor" on-invalid="null"/>
+      <call method="setSessionAuthenticationStrategy">
+        <argument type="service" id="security.authentication.session_strategy"/>
+      </call>
     </service>
     <service id="security.authentication.listener.anonymous.main" class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
       <argument type="service" id="security.token_storage"/>
@@ -3871,6 +3901,7 @@
       <argument type="iterator">
         <argument type="service" id="security.channel_listener"/>
         <argument type="service" id="security.context_listener.0"/>
+        <argument type="service" id="security.authentication.listener.json.main"/>
         <argument type="service" id="security.authentication.listener.anonymous.main"/>
         <argument type="service" id="security.access_listener"/>
       </argument>
@@ -5795,7 +5826,7 @@
         <argument key="userPrestataire" type="service" id=".errored..service_locator.Lv0DYBX.App\Entity\UserPrestataire"/>
       </argument>
     </service>
-    <service id=".service_locator.t73XFag" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.k1vN80V" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\CaissierController::delete" type="service" id=".service_locator..AAHuhQ"/>
@@ -5822,6 +5853,8 @@
         <argument key="App\Controller\TransactionController::edit" type="service" id=".service_locator.EWX.KyZ"/>
         <argument key="App\Controller\TransactionController::index" type="service" id=".service_locator.YtUaFFL"/>
         <argument key="App\Controller\TransactionController::new" type="service" id=".service_locator.7zWnKy7"/>
+        <argument key="App\Controller\TransactionController::retirer" type="service" id=".service_locator.ZIsCxOI"/>
+        <argument key="App\Controller\TransactionController::retrait" type="service" id=".service_locator.7zWnKy7"/>
         <argument key="App\Controller\TransactionController::show" type="service" id=".service_locator.EWX.KyZ"/>
         <argument key="App\Controller\UserPrestataireController::comptetravail" type="service" id=".service_locator.zPv9qzN"/>
         <argument key="App\Controller\UserPrestataireController::delete" type="service" id=".service_locator.Lv0DYBX"/>
@@ -5853,6 +5886,8 @@
         <argument key="App\Controller\TransactionController:edit" type="service" id=".service_locator.EWX.KyZ"/>
         <argument key="App\Controller\TransactionController:index" type="service" id=".service_locator.YtUaFFL"/>
         <argument key="App\Controller\TransactionController:new" type="service" id=".service_locator.7zWnKy7"/>
+        <argument key="App\Controller\TransactionController:retirer" type="service" id=".service_locator.ZIsCxOI"/>
+        <argument key="App\Controller\TransactionController:retrait" type="service" id=".service_locator.7zWnKy7"/>
         <argument key="App\Controller\TransactionController:show" type="service" id=".service_locator.EWX.KyZ"/>
         <argument key="App\Controller\UserPrestataireController:comptetravail" type="service" id=".service_locator.zPv9qzN"/>
         <argument key="App\Controller\UserPrestataireController:delete" type="service" id=".service_locator.Lv0DYBX"/>
@@ -6205,12 +6240,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.t73XFag"/>
+      <argument type="service" id=".service_locator.k1vN80V"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.t73XFag"/>
+      <argument type="service" id=".service_locator.k1vN80V"/>
     </service>
     <service id="api_platform.swagger.normalizer.api_gateway.inner" class="ApiPlatform\Core\Swagger\Serializer\DocumentationNormalizer" public="false">
       <argument type="service" id="api_platform.metadata.resource.metadata_factory.cached"/>
@@ -6698,7 +6733,7 @@
     <service id="Vich\UploaderBundle\Form\Type\VichImageType" alias="vich_uploader.form.type.image" public="false"/>
     <service id="Vich\UploaderBundle\Templating\Helper\UploaderHelper" alias="vich_uploader.templating.helper.uploader_helper" public="false"/>
     <service id="Vich\UploaderBundle\Twig\Extension\UploaderExtension" alias="vich_uploader.twig.extension.uploader" public="false"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.t73XFag"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.k1vN80V"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="api_platform.name_converter" alias="serializer.name_converter.metadata_aware"/>

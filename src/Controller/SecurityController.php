@@ -83,11 +83,23 @@ class SecurityController extends AbstractFOSRestController
     if ($user->getStatut()=="Bloquer") {
         throw $this->createNotFoundException('Accès refusé !!! Vous etes bloqué!!!');
     }
-    $token = $JWTEncoder->encode([
-        'username' => $user->getUsername(),
-        'roles' => $user->getRoles(),
-        'exp' => time() + 86400 // 1 day expiration
-    ]);
+    if($isValid==true)
+    {
+       // dump($user);die();
+        $token = $JWTEncoder->encode([
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles(),
+            'statut' => $user->getStatut(),
+            'id' => $user->getId(),
+            'compteTravail' => $user->getCompteTravail(),
+            'exp' => time() + 86400 // 1 day expiration
+        ]);  
+       // $decodetoken=$JWTEncoder->decode($token);
+        // dump($decodetoken);die();
+        //var_dump($decodetoken['username']);
+        
+    }
+   
 
     return $this->json([
         'token' => $token
@@ -98,7 +110,7 @@ class SecurityController extends AbstractFOSRestController
 
     /**
      * @Route("/register", name="register", methods={"POST"})
-     * //@IsGranted("ROLE_SUPERADMIN")
+     * @IsGranted("ROLE_SUPERADMIN")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator):Response
     {

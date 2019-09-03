@@ -10,6 +10,8 @@ use App\Entity\TypeTransaction;
 use App\Entity\UserPrestataire;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TransactionRepository;
+use App\Repository\UserRepository;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,6 +46,8 @@ class TransactionController extends AbstractController
        $values = json_decode($request->getContent());
         //
         $transaction = new Transaction();
+
+
         $form = $this->createForm(TransactionType::class, $transaction);
         
         //
@@ -70,18 +74,27 @@ class TransactionController extends AbstractController
                 {
                     $tarif= $values->getPrix();
                     $commission=($tarif*10)/100;
-  ;
+  
                     break;
                 }
             }
             $transaction->setCommission($values);
-            $libelle= $this->getDoctrine()->getRepository(TypeTransaction::class)->findOneBy(['libelle'=>$data]);
-            $transaction->setLibelle($libelle) ; 
-             
-            $findcompte= $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['numero'=>$data]);
-            $multiserv= $this->getDoctrine()->getRepository(UserPrestataire::class)->findOneBy(['matriculeEntreprise'=>$data]);
-            $transaction->setLibelle($multiserv) ; 
-            var_dump($multiserv); die();
+           
+            $transaction->setLibelle('envoie') ; 
+            $transaction->setStatut('Pas retiré!') ; 
+          
+            $connex=$this->getUser();
+           // dump($connex);die();entityManager
+            $connex->getCompteTravail();
+           // dump($connex->getCompteTravail()); die();
+            $findcompte= $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['id'=>$connex->getCompteTravail()]);
+            //dump($findcompte);die();
+            $multiserv=$this->getUser();
+            $multiserv->getId();
+            $multiservice= $this->getDoctrine()->getRepository(UserPrestataire::class)->findOneBy(['authent'=> $multiserv->getId()]);
+         
+            $transaction->setMultiservice($multiservice) ; 
+            
             if(!$findcompte)
             {
                 $notfound = [
@@ -91,7 +104,7 @@ class TransactionController extends AbstractController
     
                 return new JsonResponse($notfound, 404);    
             } 
-
+            
             if ($findcompte->getSolde() > $transaction->getMontant())
              {
                 
@@ -109,9 +122,114 @@ class TransactionController extends AbstractController
             return new Response('Inserré. Voici le code : ' . $transaction->getCode(),Response::HTTP_CREATED);
           }
 
-    return new Response('Pas envoyé',Response::HTTP_UNAUTHORIZED);
+    return new Response('Pas envoyé! Votre compte ne vous le permet pas',Response::HTTP_UNAUTHORIZED);
   }
     }
+    /**
+     * @Route("/retrait", name="retrait", methods={"GET","POST"})
+     */
+    public function retrait(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator,  SerializerInterface $serializer): Response
+    {
+        
+      
+         $datas=$request->request->all();
+            $connex=$this->getUser();
+            $connex->getCompteTravail();
+            $findcompte= $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['id'=>$connex->getCompteTravail()]);
+            $multiserv=$this->getUser();
+            $multiserv->getId();
+            $multiservice= $this->getDoctrine()->getRepository(UserPrestataire::class)->findOneBy(['authent'=> $multiserv->getId()]);
+             if(!$multiservice)
+             {
+                 $notfound = [
+                     'status' => 404,
+                     'message' => 'Ce service n\' est pas trouvé'
+                 ];
+     
+                 return new JsonResponse($notfound, 404);    
+             } 
+        
+        if(!$findcompte)
+        {
+            $notfound = [
+                'status' => 404,
+                'message' => 'Ce compte de travail n\' est pas trouvé'
+            ];
+
+            return new JsonResponse($notfound, 404);    
+        } 
+
+        $envoyer=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['envoyeurNomComplet'=>$datas]);
+        $recepteur=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['recepteurNomComplet'=>$datas]);
+        $code=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['code'=>$datas]);
+       
+        $transaction=$this->getDoctrine()->getRepository(Transaction::class)->find($envoyer->getId());
+       
+        $transaction->setServiceRetrait($multiservice) ; 
+        $transaction->setDateRetrait(new \DateTime()); 
+       
+          if(!$code)
+        {
+            throw $this->createNotFoundException('Ce code n\'existe pas sur la base de données!');
+        }
+        if(!$envoyer)
+        {
+            throw $this->createNotFoundException('Ce envoyeur n\'exite pas sur la base de données!');
+        }
+        if(!$recepteur)
+        {
+            throw $this->createNotFoundException('Ce envoyeur n\'exite pas sur la base de données!');
+        }
+        $a=$datas['recepteurCni'];
+       
+       if($a)
+        { 
+        
+           
+                $taxe = $this->getDoctrine()->getRepository(Tarif::class)->findAll();
+                foreach ($taxe as $values) 
+          {
+              $values->getBI();
+              $values->getBS();
+              $values->getPrix();
+              if ($transaction->getMontant() >= $values->getBI() && $transaction->getMontant() <= $values->getBS());
+              {
+                  $tarif= $values->getPrix();
+                  $commission=($tarif*10)/100;
+
+                  break;
+              }
+          }
+
+          $transaction->SetStatut("retiré");
+          $transaction->SetRecepteurCni($a);
+          $findcompte->setSolde($findcompte->getSolde()+$transaction->getMontant()+$commission);
+              $errors = $validator->validate($transaction);
+              if (count($errors))
+               {
+                  $errors = $serializer->serialize($errors, 'json');
+                  return new Response($errors, 500);
+              }
+          
+            $entityManager->flush();
+            //dump($entityManager->flush());die();
+           
+            $data = [
+                'status' => 201,
+                'message' => 'Retrait effectué!, montant : '
+            ];
+            return new JsonResponse($data);
+        }
+       
+        
+    
+    $data = [
+        'status' => 401,
+        'message' => 'Retrait pas effectué!'
+    ];
+    return new JsonResponse($data);
+}
+
     /**
      * @Route("/{id}", name="transaction_show", methods={"GET"})
      */
@@ -154,5 +272,31 @@ class TransactionController extends AbstractController
         }
 
         return $this->redifindcomptetToRoute('transaction_index');
+    }
+
+    /**
+     * @Route("/retirer", name="retirer", methods={"GET","POST"})
+     */
+    public function retirer(Request $request, EntityManagerInterface $entityManager){
+
+
+        $datas=$request->request->all();
+
+         $envoyer=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['envoyeurNomComplet'=>$datas]);
+         $recepteur=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['recepteurNomComplet'=>$datas]);
+         
+         $code=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['code'=>$datas]);
+        //  $entityManager = $this->getDoctrine()->getManager();
+        //  $id=$envoyer->getId();
+        //  $transaction= $entityManager->getRepository(Transaction::class)->find($id);
+        $transaction=$this->getDoctrine()->getRepository(Transaction::class)->find($envoyer->getId());
+        $transaction->setStatut("revalider");
+        $multiserv=$this->getUser();
+        $multiserv->getId();
+        $multiservice= $this->getDoctrine()->getRepository(UserPrestataire::class)->findOneBy(['authent'=> $multiserv->getId()]);
+      
+        $transaction->setServiceRetrait($multiservice);
+        $entityManager->flush();
+
     }
 }

@@ -26,9 +26,7 @@ class TransactionType extends AbstractType
             ->add('envoyeurCni')
             ->add('recepteurNomComplet')
             ->add('recepteurCni')
-           /*  ->add('libelle',EntityType::class,[
-                'class'=> TypeTransaction::class,
-                'choice_label'=> 'libelle_id']) */
+         
              ->add('multiservice',EntityType::class,[
                 'class'=> UserPrestataire::class,
                 'choice_label'=> 'user_id']) 

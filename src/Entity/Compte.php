@@ -46,9 +46,15 @@ class Compte
      */
     private $userPrestataires;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="compteTravail")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->userPrestataires = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
    
@@ -124,31 +130,33 @@ class Compte
         return $this;
     }
 
+    
+
     /**
-     * @return Collection|UserPrestataire[]
+     * @return Collection|User[]
      */
-    public function getUserPrestataires(): Collection
+    public function getUsers(): Collection
     {
-        return $this->userPrestataires;
+        return $this->users;
     }
 
-    public function addUserPrestataire(UserPrestataire $userPrestataire): self
+    public function addUser(User $user): self
     {
-        if (!$this->userPrestataires->contains($userPrestataire)) {
-            $this->userPrestataires[] = $userPrestataire;
-            $userPrestataire->setCompte($this);
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setCompteTravail($this);
         }
 
         return $this;
     }
 
-    public function removeUserPrestataire(UserPrestataire $userPrestataire): self
+    public function removeUser(User $user): self
     {
-        if ($this->userPrestataires->contains($userPrestataire)) {
-            $this->userPrestataires->removeElement($userPrestataire);
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
             // set the owning side to null (unless already changed)
-            if ($userPrestataire->getCompte() === $this) {
-                $userPrestataire->setCompte(null);
+            if ($user->getCompteTravail() === $this) {
+                $user->setCompteTravail(null);
             }
         }
 

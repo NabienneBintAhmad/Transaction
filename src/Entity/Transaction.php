@@ -17,13 +17,7 @@ class Transaction
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TypeTransaction", inversedBy="transactions")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $libelle;
-
+    
     /**
      * @ORM\Column(type="datetime")
      */
@@ -51,6 +45,7 @@ class Transaction
 
     /**
      * @ORM\Column(type="bigint")
+     *  @ORM\JoinColumn(nullable=true)
      */
     private $recepteurCni;
 
@@ -71,21 +66,30 @@ class Transaction
      */
     private $code;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $libelle;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateRetrait;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $statut;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\UserPrestataire", inversedBy="transactions")
+     *  @ORM\JoinColumn(nullable=true)
+     */
+    private $serviceRetrait;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLibelle(): ?TypeTransaction
-    {
-        return $this->libelle;
-    }
-
-    public function setLibelle(?TypeTransaction $libelle): self
-    {
-        $this->libelle = $libelle;
-
-        return $this;
     }
 
     public function getDate(): ?\DateTimeInterface
@@ -192,6 +196,54 @@ class Transaction
     public function setCode(int $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function getDateRetrait(): ?\DateTimeInterface
+    {
+        return $this->dateRetrait;
+    }
+
+    public function setDateRetrait(?\DateTimeInterface $dateRetrait): self
+    {
+        $this->dateRetrait = $dateRetrait;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): self
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
+
+    public function getServiceRetrait(): ?UserPrestataire
+    {
+        return $this->serviceRetrait;
+    }
+
+    public function setServiceRetrait(?UserPrestataire $serviceRetrait): self
+    {
+        $this->serviceRetrait = $serviceRetrait;
 
         return $this;
     }

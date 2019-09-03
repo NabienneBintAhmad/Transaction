@@ -67,9 +67,15 @@ class UserPrestataire
     private $matricule;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="userPrestataires")
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="serviceRetrait")
      */
-    private $compte;
+    private $transactions;
+
+    public function __construct()
+    {
+        $this->transactions = new ArrayCollection();
+    }
+
 
 
     public function getId(): ?int
@@ -185,17 +191,37 @@ class UserPrestataire
         return $this;
     }
 
-    public function getCompte(): ?Compte
+    /**
+     * @return Collection|Transaction[]
+     */
+    public function getTransactions(): Collection
     {
-        return $this->compte;
+        return $this->transactions;
     }
 
-    public function setCompte(?Compte $compte): self
+    public function addTransaction(Transaction $transaction): self
     {
-        $this->compte = $compte;
+        if (!$this->transactions->contains($transaction)) {
+            $this->transactions[] = $transaction;
+            $transaction->setServiceRetrait($this);
+        }
 
         return $this;
     }
+
+    public function removeTransaction(Transaction $transaction): self
+    {
+        if ($this->transactions->contains($transaction)) {
+            $this->transactions->removeElement($transaction);
+            // set the owning side to null (unless already changed)
+            if ($transaction->getServiceRetrait() === $this) {
+                $transaction->setServiceRetrait(null);
+            }
+        }
+
+        return $this;
+    }
+
 
   
 }

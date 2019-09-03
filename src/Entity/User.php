@@ -86,6 +86,13 @@ class User implements UserInterface
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="users")
+     */
+    private $compteTravail;
+
+    
+
   
 
     /**
@@ -213,6 +220,19 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getCompteTravail(): ?Compte
+    {
+        return $this->compteTravail;
+    }
+
+    public function setCompteTravail(?Compte $compteTravail): self
+    {
+        $this->compteTravail = $compteTravail;
+
+        return $this;
+    }
+
 
  
 }
