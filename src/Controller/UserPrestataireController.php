@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Compte;
+use App\Entity\Admin;
 use App\Form\UserType;
 use App\Entity\Prestataire;
 use App\Repository\PrestataireRepository;
@@ -80,11 +81,14 @@ class UserPrestataireController extends AbstractController
                 $form->submit($data);
                 $userpresta->setMatricule($mat);
                 $userpresta->setAuthent($user);
-               // $presta=$data['matriculeEntreprise'];
-                $prestataire = $this->getDoctrine()->getRepository(Prestataire::class)->findOneBy(['matricule'=>$data]);
-               // var_dump($prestataire);die();
-                $userpresta->setMatriculeEntreprise($prestataire);
+                $presta=$this->getUser()->getId();
+                //dump($presta);die();
+                $admin = $this->getDoctrine()->getRepository(Admin::class)->findOneBy(['authent'=>$presta]);
                 
+                $multiservice = $this->getDoctrine()->getRepository(Prestataire::class)->find($admin);
+                //dump($multiservice);die(); 
+                $userpresta->setMatriculeEntreprise($multiservice);
+            
                 if(!$userpresta->getAuthent())
                 {
                     $notfound = [

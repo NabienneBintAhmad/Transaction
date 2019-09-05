@@ -88,7 +88,7 @@ class TransactionController extends AbstractController
             $connex->getCompteTravail();
            // dump($connex->getCompteTravail()); die();
             $findcompte= $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['id'=>$connex->getCompteTravail()]);
-            //dump($findcompte);die();
+           // dump($findcompte);die();
             $multiserv=$this->getUser();
             $multiserv->getId();
             $multiservice= $this->getDoctrine()->getRepository(UserPrestataire::class)->findOneBy(['authent'=> $multiserv->getId()]);
@@ -164,7 +164,12 @@ class TransactionController extends AbstractController
         $code=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['code'=>$datas]);
        
         $transaction=$this->getDoctrine()->getRepository(Transaction::class)->find($envoyer->getId());
+        $statut=$transaction->getStatut();
+        if($statut=="retiré"){
+
+            throw $this->createNotFoundException('Cette transaction est déja retiré!');
        
+        }
         $transaction->setServiceRetrait($multiservice) ; 
         $transaction->setDateRetrait(new \DateTime()); 
        
@@ -229,6 +234,18 @@ class TransactionController extends AbstractController
     ];
     return new JsonResponse($data);
 }
+  /**
+     * @Route("/listtransaction", name="transaction_list", methods={"GET"})
+     */
+    public function list(TransactionRepository $transRepository, SerializerInterface $serializer): Response
+    {
+       $list=$transRepository->findAll();
+       $data=$serializer->serialize($list, 'json');
+
+       return new Response($data, 200, [
+        'Content-Type' => 'application/json'
+    ]);
+    }
 
     /**
      * @Route("/{id}", name="transaction_show", methods={"GET"})
@@ -274,29 +291,5 @@ class TransactionController extends AbstractController
         return $this->redifindcomptetToRoute('transaction_index');
     }
 
-    /**
-     * @Route("/retirer", name="retirer", methods={"GET","POST"})
-     */
-    public function retirer(Request $request, EntityManagerInterface $entityManager){
-
-
-        $datas=$request->request->all();
-
-         $envoyer=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['envoyeurNomComplet'=>$datas]);
-         $recepteur=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['recepteurNomComplet'=>$datas]);
-         
-         $code=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['code'=>$datas]);
-        //  $entityManager = $this->getDoctrine()->getManager();
-        //  $id=$envoyer->getId();
-        //  $transaction= $entityManager->getRepository(Transaction::class)->find($id);
-        $transaction=$this->getDoctrine()->getRepository(Transaction::class)->find($envoyer->getId());
-        $transaction->setStatut("revalider");
-        $multiserv=$this->getUser();
-        $multiserv->getId();
-        $multiservice= $this->getDoctrine()->getRepository(UserPrestataire::class)->findOneBy(['authent'=> $multiserv->getId()]);
-      
-        $transaction->setServiceRetrait($multiservice);
-        $entityManager->flush();
-
-    }
+  
 }

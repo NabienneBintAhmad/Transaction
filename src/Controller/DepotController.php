@@ -10,6 +10,7 @@ use App\Entity\Caissier;
 use App\Form\Depot1Type;
 use App\Repository\DepotRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,11 +55,17 @@ class DepotController extends AbstractController
             $depot->setDate(new \DateTime());
            
            //$depot->setMontant($values->montant);
-
+           $connex=$this->getUser();
+             $connex->getId();
+           
+            $caissier =$this->getDoctrine()->getRepository(Caissier::class)->findOneBy(['authent'=>  $connex->getId()]);
+            
+            $depot->setCaissier($caissier);
+           
             $compte = $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['numero'=>$data]);
            
             $depot->setCompte($compte);
-            if(!$depot->getCompte())
+            if(!$compte)
             {
                 $notfound = [
                     'status' => 404,
@@ -69,11 +76,7 @@ class DepotController extends AbstractController
             }
             $compte->setSolde($compte->getSolde() + $depot->getMontant());
 
-          $caissier =$this->getDoctrine()->getRepository(Caissier::class)->findOneBy(['matricule'=>$data]);
-           //$caissier=$this->getUser();
-           //var_dump($compte); die();
-            $depot->setCaissier($caissier);
-            if(!$depot->getCaissier())
+            if(!$caissier)
             {
                 $notfound = [
                     'status' => 404,
@@ -98,6 +101,19 @@ class DepotController extends AbstractController
 
            return new Response('Inserré',Response::HTTP_CREATED);
 
+    }
+
+      /**
+     * @Route("/listdepot", name="depot_list", methods={"GET"})
+     */
+    public function list(DepotRepository $depotRepository, SerializerInterface $serializer): Response
+    {
+       $list=$depotRepository->findAll();
+       $data=$serializer->serialize($list, 'json');
+
+       return new Response($data, 200, [
+        'Content-Type' => 'application/json'
+    ]);
     }
 
     /**

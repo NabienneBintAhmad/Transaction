@@ -30,10 +30,7 @@ class UserPrestataireType extends AbstractType
                 'class'=> User::class,
                 'choice_label'=> 'authent_id'
                 ]) */
-           ->add('Compte',EntityType::class,[
-                'class'=> Compte::class,
-                'choice_label'=> 'Compte_id'
-                    ]) 
+           
         ;
     }
 

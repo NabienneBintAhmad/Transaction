@@ -567,6 +567,9 @@
     <service id="App\DataFixtures\TarifFixtures" class="App\DataFixtures\TarifFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
     </service>
+    <service id="App\DataFixtures\Y" class="App\DataFixtures\Y" autowire="true" autoconfigure="true">
+      <tag name="doctrine.fixture.orm"/>
+    </service>
     <service id="App\Form\AdminTpeType" class="App\Form\AdminTpeType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
     </service>
@@ -5118,6 +5121,10 @@
             <argument key="fixture" type="service" id="App\DataFixtures\TarifFixtures"/>
             <argument key="groups" type="collection"/>
           </argument>
+          <argument type="collection">
+            <argument key="fixture" type="service" id="App\DataFixtures\Y"/>
+            <argument key="groups" type="collection"/>
+          </argument>
         </argument>
       </call>
     </service>
@@ -5503,6 +5510,8 @@
     <service id=".abstract.instanceof.App\DataFixtures\SuperAdminFixetures" class="App\DataFixtures\SuperAdminFixetures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\TarifFixtures" class="App\DataFixtures\TarifFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\TarifFixtures" class="App\DataFixtures\TarifFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\Y" class="App\DataFixtures\Y" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\DataFixtures\Y" class="App\DataFixtures\Y" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\AdminTpeType" class="App\Form\AdminTpeType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\AdminTpeType" class="App\Form\AdminTpeType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\CaissierType" class="App\Form\CaissierType" autowire="true" abstract="true"/>
@@ -5714,6 +5723,13 @@
         <argument key="passwordEncoder" type="service" id="security.user_password_encoder.generic"/>
       </argument>
     </service>
+    <service id=".service_locator.yNYtoMF" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="caissierRepository" type="service" id="App\Repository\CaissierRepository"/>
+        <argument key="serializer" type="service" id="serializer"/>
+      </argument>
+    </service>
     <service id=".service_locator..AAHuhQ" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -5732,6 +5748,13 @@
         <argument key="entityManager" type="service" id="doctrine.orm.default_entity_manager"/>
       </argument>
     </service>
+    <service id=".service_locator.G81U5Rg" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="depotRepository" type="service" id="App\Repository\DepotRepository"/>
+        <argument key="serializer" type="service" id="serializer"/>
+      </argument>
+    </service>
     <service id=".service_locator.E3DK7HO" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -5742,6 +5765,13 @@
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="prestataireRepository" type="service" id="App\Repository\PrestataireRepository"/>
+      </argument>
+    </service>
+    <service id=".service_locator.NjBB26U" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="prestaRepository" type="service" id="App\Repository\PrestataireRepository"/>
+        <argument key="serializer" type="service" id="serializer"/>
       </argument>
     </service>
     <service id=".service_locator.HZjlZzw" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
@@ -5773,6 +5803,20 @@
         <argument key="userRepository" type="service" id="App\Repository\UserRepository"/>
       </argument>
     </service>
+    <service id=".service_locator.AK4A8Fa" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="compteRepository" type="service" id="App\Repository\CompteRepository"/>
+        <argument key="serializer" type="service" id="serializer"/>
+      </argument>
+    </service>
+    <service id=".service_locator.OIueEnh" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="serializer" type="service" id="serializer"/>
+        <argument key="userRepository" type="service" id="App\Repository\UserRepository"/>
+      </argument>
+    </service>
     <service id=".service_locator.l2alLEu" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -5791,6 +5835,13 @@
         <argument key="entityManager" type="service" id="doctrine.orm.default_entity_manager"/>
         <argument key="serializer" type="service" id="serializer"/>
         <argument key="validator" type="service" id="debug.validator"/>
+      </argument>
+    </service>
+    <service id=".service_locator.focPM19" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="serializer" type="service" id="serializer"/>
+        <argument key="transRepository" type="service" id="App\Repository\TransactionRepository"/>
       </argument>
     </service>
     <service id=".service_locator.EWX.KyZ" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
@@ -5826,34 +5877,37 @@
         <argument key="userPrestataire" type="service" id=".errored..service_locator.Lv0DYBX.App\Entity\UserPrestataire"/>
       </argument>
     </service>
-    <service id=".service_locator.k1vN80V" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.GujrgBD" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Controller\CaissierController::delete" type="service" id=".service_locator..AAHuhQ"/>
         <argument key="App\Controller\CaissierController::edit" type="service" id=".service_locator..AAHuhQ"/>
+        <argument key="App\Controller\CaissierController::list" type="service" id=".service_locator.yNYtoMF"/>
         <argument key="App\Controller\CaissierController::new" type="service" id=".service_locator.JBoVXlr"/>
         <argument key="App\Controller\CaissierController::show" type="service" id=".service_locator..AAHuhQ"/>
         <argument key="App\Controller\DepotController::delete" type="service" id=".service_locator.E3DK7HO"/>
         <argument key="App\Controller\DepotController::edit" type="service" id=".service_locator.E3DK7HO"/>
         <argument key="App\Controller\DepotController::index" type="service" id=".service_locator.VzTiFkg"/>
+        <argument key="App\Controller\DepotController::list" type="service" id=".service_locator.G81U5Rg"/>
         <argument key="App\Controller\DepotController::new" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\DepotController::show" type="service" id=".service_locator.E3DK7HO"/>
-        <argument key="App\Controller\PrestataireController::contrat" type="service" id=".service_locator.ib1KWwy"/>
-        <argument key="App\Controller\PrestataireController::delete" type="service" id=".service_locator.HZjlZzw"/>
         <argument key="App\Controller\PrestataireController::edit" type="service" id=".service_locator.HZjlZzw"/>
         <argument key="App\Controller\PrestataireController::index" type="service" id=".service_locator.ib1KWwy"/>
+        <argument key="App\Controller\PrestataireController::list" type="service" id=".service_locator.NjBB26U"/>
         <argument key="App\Controller\PrestataireController::show" type="service" id=".service_locator.HZjlZzw"/>
         <argument key="App\Controller\SecurityController::bloquer" type="service" id=".service_locator.28.2M_B"/>
         <argument key="App\Controller\SecurityController::compte" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\SecurityController::debloquer" type="service" id=".service_locator.28.2M_B"/>
+        <argument key="App\Controller\SecurityController::listcompte" type="service" id=".service_locator.AK4A8Fa"/>
+        <argument key="App\Controller\SecurityController::listuser" type="service" id=".service_locator.OIueEnh"/>
         <argument key="App\Controller\SecurityController::login" type="service" id=".service_locator.QfkAM3R"/>
         <argument key="App\Controller\SecurityController::register" type="service" id=".service_locator.H3qnu8f"/>
         <argument key="App\Controller\SecurityController::setViewHandler" type="service" id=".service_locator.l2alLEu"/>
         <argument key="App\Controller\TransactionController::delete" type="service" id=".service_locator.EWX.KyZ"/>
         <argument key="App\Controller\TransactionController::edit" type="service" id=".service_locator.EWX.KyZ"/>
         <argument key="App\Controller\TransactionController::index" type="service" id=".service_locator.YtUaFFL"/>
+        <argument key="App\Controller\TransactionController::list" type="service" id=".service_locator.focPM19"/>
         <argument key="App\Controller\TransactionController::new" type="service" id=".service_locator.7zWnKy7"/>
-        <argument key="App\Controller\TransactionController::retirer" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\TransactionController::retrait" type="service" id=".service_locator.7zWnKy7"/>
         <argument key="App\Controller\TransactionController::show" type="service" id=".service_locator.EWX.KyZ"/>
         <argument key="App\Controller\UserPrestataireController::comptetravail" type="service" id=".service_locator.zPv9qzN"/>
@@ -5864,29 +5918,32 @@
         <argument key="App\Controller\UserPrestataireController::show" type="service" id=".service_locator.Lv0DYBX"/>
         <argument key="App\Controller\CaissierController:delete" type="service" id=".service_locator..AAHuhQ"/>
         <argument key="App\Controller\CaissierController:edit" type="service" id=".service_locator..AAHuhQ"/>
+        <argument key="App\Controller\CaissierController:list" type="service" id=".service_locator.yNYtoMF"/>
         <argument key="App\Controller\CaissierController:new" type="service" id=".service_locator.JBoVXlr"/>
         <argument key="App\Controller\CaissierController:show" type="service" id=".service_locator..AAHuhQ"/>
         <argument key="App\Controller\DepotController:delete" type="service" id=".service_locator.E3DK7HO"/>
         <argument key="App\Controller\DepotController:edit" type="service" id=".service_locator.E3DK7HO"/>
         <argument key="App\Controller\DepotController:index" type="service" id=".service_locator.VzTiFkg"/>
+        <argument key="App\Controller\DepotController:list" type="service" id=".service_locator.G81U5Rg"/>
         <argument key="App\Controller\DepotController:new" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\DepotController:show" type="service" id=".service_locator.E3DK7HO"/>
-        <argument key="App\Controller\PrestataireController:contrat" type="service" id=".service_locator.ib1KWwy"/>
-        <argument key="App\Controller\PrestataireController:delete" type="service" id=".service_locator.HZjlZzw"/>
         <argument key="App\Controller\PrestataireController:edit" type="service" id=".service_locator.HZjlZzw"/>
         <argument key="App\Controller\PrestataireController:index" type="service" id=".service_locator.ib1KWwy"/>
+        <argument key="App\Controller\PrestataireController:list" type="service" id=".service_locator.NjBB26U"/>
         <argument key="App\Controller\PrestataireController:show" type="service" id=".service_locator.HZjlZzw"/>
         <argument key="App\Controller\SecurityController:bloquer" type="service" id=".service_locator.28.2M_B"/>
         <argument key="App\Controller\SecurityController:compte" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\SecurityController:debloquer" type="service" id=".service_locator.28.2M_B"/>
+        <argument key="App\Controller\SecurityController:listcompte" type="service" id=".service_locator.AK4A8Fa"/>
+        <argument key="App\Controller\SecurityController:listuser" type="service" id=".service_locator.OIueEnh"/>
         <argument key="App\Controller\SecurityController:login" type="service" id=".service_locator.QfkAM3R"/>
         <argument key="App\Controller\SecurityController:register" type="service" id=".service_locator.H3qnu8f"/>
         <argument key="App\Controller\SecurityController:setViewHandler" type="service" id=".service_locator.l2alLEu"/>
         <argument key="App\Controller\TransactionController:delete" type="service" id=".service_locator.EWX.KyZ"/>
         <argument key="App\Controller\TransactionController:edit" type="service" id=".service_locator.EWX.KyZ"/>
         <argument key="App\Controller\TransactionController:index" type="service" id=".service_locator.YtUaFFL"/>
+        <argument key="App\Controller\TransactionController:list" type="service" id=".service_locator.focPM19"/>
         <argument key="App\Controller\TransactionController:new" type="service" id=".service_locator.7zWnKy7"/>
-        <argument key="App\Controller\TransactionController:retirer" type="service" id=".service_locator.ZIsCxOI"/>
         <argument key="App\Controller\TransactionController:retrait" type="service" id=".service_locator.7zWnKy7"/>
         <argument key="App\Controller\TransactionController:show" type="service" id=".service_locator.EWX.KyZ"/>
         <argument key="App\Controller\UserPrestataireController:comptetravail" type="service" id=".service_locator.zPv9qzN"/>
@@ -6240,12 +6297,12 @@
       <argument type="service" id="security.token_storage"/>
     </service>
     <service id="debug.argument_resolver.service.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver" public="false">
-      <argument type="service" id=".service_locator.k1vN80V"/>
+      <argument type="service" id=".service_locator.GujrgBD"/>
     </service>
     <service id="debug.argument_resolver.default.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" public="false"/>
     <service id="debug.argument_resolver.variadic.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\VariadicValueResolver" public="false"/>
     <service id="debug.argument_resolver.not_tagged_controller.inner" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver" public="false">
-      <argument type="service" id=".service_locator.k1vN80V"/>
+      <argument type="service" id=".service_locator.GujrgBD"/>
     </service>
     <service id="api_platform.swagger.normalizer.api_gateway.inner" class="ApiPlatform\Core\Swagger\Serializer\DocumentationNormalizer" public="false">
       <argument type="service" id="api_platform.metadata.resource.metadata_factory.cached"/>
@@ -6733,7 +6790,7 @@
     <service id="Vich\UploaderBundle\Form\Type\VichImageType" alias="vich_uploader.form.type.image" public="false"/>
     <service id="Vich\UploaderBundle\Templating\Helper\UploaderHelper" alias="vich_uploader.templating.helper.uploader_helper" public="false"/>
     <service id="Vich\UploaderBundle\Twig\Extension\UploaderExtension" alias="vich_uploader.twig.extension.uploader" public="false"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.k1vN80V"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.GujrgBD"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem" public="false"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="api_platform.name_converter" alias="serializer.name_converter.metadata_aware"/>

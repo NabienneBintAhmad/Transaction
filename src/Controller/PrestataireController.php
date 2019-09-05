@@ -9,9 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Serializer\SerializerInterface;
 /**
  * @Route("/api")
  */
@@ -52,6 +53,20 @@ class PrestataireController extends AbstractController
             'prestataires' => $prestataireRepository->findAll(),
         ]); */
     }
+
+    /**
+     * @Route("/listpresta", name="prestataire_list", methods={"GET"})
+     */
+    public function list(PrestataireRepository $prestaRepository, SerializerInterface $serializer): Response
+    {
+       $list=$prestaRepository->findAll();
+       $data=$serializer->serialize($list, 'json');
+
+       return new Response($data, 200, [
+        'Content-Type' => 'application/json'
+    ]);
+    }
+
 
     /**
      * @Route("/new", name="prestataire_new", methods={"GET","POST"})
@@ -107,29 +122,6 @@ class PrestataireController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="prestataire_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Prestataire $prestataire): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$prestataire->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($prestataire);
-            $entityManager->flush();
-        }
 
-        return $this->redirectToRoute('prestataire_index');
-    }
-
-    /**
-     * @Route("/", name="contrat", methods={"GET"})
-     */
-    public function contrat(PrestataireRepository $prestataireRepository)
-    {
-       
-        /* return $this->render('prestataire/contratpresta.html.twig', [
-            'prestataire' => $prestataireRepository->findAll(),
-             compact('prestataire', 'connectedPrestataire'),
-        ]); */
-    }
+ 
 }

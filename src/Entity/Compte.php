@@ -51,6 +51,11 @@ class Compte
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $DateCreation;
+
     public function __construct()
     {
         $this->userPrestataires = new ArrayCollection();
@@ -159,6 +164,18 @@ class Compte
                 $user->setCompteTravail(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->DateCreation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $DateCreation): self
+    {
+        $this->DateCreation = $DateCreation;
 
         return $this;
     }

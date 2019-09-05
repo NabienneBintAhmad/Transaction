@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Admin;
 use App\Entity\Image;
 use App\Entity\Compte;
+use App\Repository\CompteRepository;
 use App\Form\UserType;
 use App\Form\ImageType;
 use App\Entity\Caissier;
@@ -64,36 +65,53 @@ class SecurityController extends AbstractFOSRestController
     {
 
         $values = json_decode($request->getContent());
-        $user = new User();
+        $data = $request->request->all();
+        
 
-       /*    return $this->json([
-            'username' => $user->getUsername(),
-            'roles' => $user->getRoles()
-        ]);  */ 
-        $user = $userRepository->findOneByusername($values->username);
+        $user =$this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=>$data]);
+       
         if(!$user)
         {
             throw $this->createNotFoundException('User Not Found');
         }
         $isValid = $this->passwordEncoder->isPasswordValid($user, $values->password);
-        if(!$isValid )
-        {
-            throw $this->createNotFoundException('Mot de passe incorrecte');
-        }
+        
+        
     if ($user->getStatut()=="Bloquer") {
         throw $this->createNotFoundException('Accès refusé !!! Vous etes bloqué!!!');
     }
+    if(!$isValid)
+        {
+            throw $this->createNotFoundException('Mot de passe incorrecte');
+        }
     if($isValid==true)
     {
        // dump($user);die();
+      // dump($user->getCompteTravail()->getId());die();
+      $compte =$user->getCompteTravail(); 
+      if (!empty($compte) ) {
+      $token = $JWTEncoder->encode([
+            
+                'username' => $user->getUsername(),
+                'roles' => $user->getRoles(),
+                'statut' => $user->getStatut(),
+                'id' => $user->getId(),
+                'compteTravail' => $user->getCompteTravail()->getId(),
+                'exp' => time() + 86400 // 1 day expiration  
+            
+        ]);
+      }
+      else{
         $token = $JWTEncoder->encode([
+            
             'username' => $user->getUsername(),
             'roles' => $user->getRoles(),
             'statut' => $user->getStatut(),
             'id' => $user->getId(),
-            'compteTravail' => $user->getCompteTravail(),
-            'exp' => time() + 86400 // 1 day expiration
-        ]);  
+            'exp' => time() + 86400 // 1 day expiration  
+        
+    ]);
+      }  
        // $decodetoken=$JWTEncoder->decode($token);
         // dump($decodetoken);die();
         //var_dump($decodetoken['username']);
@@ -104,13 +122,16 @@ class SecurityController extends AbstractFOSRestController
     return $this->json([
         'token' => $token
     ]);
-
+    if(!$isValid)
+    {
+        throw $this->createNotFoundException('Mot de passe incorrecte');
+    }
 
     }
 
     /**
      * @Route("/register", name="register", methods={"POST"})
-     * @IsGranted("ROLE_SUPERADMIN")
+     * //@IsGranted("ROLE_SUPERADMIN")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator):Response
     {
@@ -202,6 +223,7 @@ class SecurityController extends AbstractFOSRestController
             $compte->setProprietaire($presta);
             $compte->setNumero($compt);
             $compte->setSolde(0);
+            $compte->setDateCreation(new \DateTime()); 
             if(!$compte->getProprietaire())
             {
                 $notfound = [
@@ -225,7 +247,7 @@ class SecurityController extends AbstractFOSRestController
         }
         
    /**
-     * @Route("/compt", name="compt", methods={"POST"})
+     * @Route("/compte", name="compte", methods={"POST"})
      * //@IsGranted("ROLE_SUPERADMIN")
      */
     public function compte(Request $request, EntityManagerInterface $entityManager): Response
@@ -239,9 +261,10 @@ class SecurityController extends AbstractFOSRestController
          $form->handleRequest($request);
          $data = $request->request->all();
          $form->submit($data);
-       
+        $compte->setDateCreation(new \DateTime()); 
         $compte->setNumero($compt);
         $compte->setSolde(0);
+        $compte->setDateCreation(new \DateTime()); 
         $proprietaire = $this->getDoctrine()->getRepository(Prestataire::class)->findOneBy(['matricule'=>$data]);
         $compte->setProprietaire($proprietaire);
   
@@ -276,9 +299,7 @@ class SecurityController extends AbstractFOSRestController
         $form->handleRequest($request);
         $datas=$request->request->all();
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=>$datas]);
- 
-        //$user = $userRepository->findOneBy(['username'=>$values]);
-        if(!$user)
+      if(!$user)
         {
             throw $this->createNotFoundException('User Not Found');
         }
@@ -292,7 +313,30 @@ class SecurityController extends AbstractFOSRestController
         return new JsonResponse($data);
        
     }
+  /**
+     * @Route("/listcompte", name="compte_list", methods={"GET"})
+     */
+    public function listcompte(CompteRepository $compteRepository, SerializerInterface $serializer): Response
+    {
+       $list=$compteRepository->findAll();
+       $data=$serializer->serialize($list, 'json');
 
+       return new Response($data, 200, [
+        'Content-Type' => 'application/json'
+    ]);
+    }
+     /**
+     * @Route("/listuser", name="user_list", methods={"GET"})
+     */
+    public function listuser(UserRepository $userRepository, SerializerInterface $serializer): Response
+    {
+       $list=$userRepository->findAll();
+       $data=$serializer->serialize($list, 'json');
+
+       return new Response($data, 200, [
+        'Content-Type' => 'application/json'
+    ]);
+    }
 
     /**
       * @Route("/debloquer", name="debloquer", methods={"POST"})

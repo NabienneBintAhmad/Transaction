@@ -44,8 +44,7 @@ class Transaction
     private $recepteurNomComplet;
 
     /**
-     * @ORM\Column(type="bigint")
-     *  @ORM\JoinColumn(nullable=true)
+     * @ORM\Column(type="bigint" , nullable=true)
      */
     private $recepteurCni;
 

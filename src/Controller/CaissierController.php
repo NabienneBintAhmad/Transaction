@@ -6,8 +6,8 @@ use App\Entity\User;
 use App\Entity\Compte;
 use App\Form\UserType;
 use App\Entity\Caissier;
+use App\Repository\CaissierRepository;
 use App\Form\CompteType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use App\Form\CaissierType;;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -88,7 +88,19 @@ class CaissierController extends AbstractController
 
             return new Response('Inserré',Response::HTTP_CREATED);
     }
+/**
+     * @Route("/listcaissier", name="caissier_list", methods={"GET"})
+   
+     */
+    public function list(CaissierRepository $caissierRepository, SerializerInterface $serializer): Response
+    {
+       $list=$caissierRepository->findAll();
+       $data=$serializer->serialize($list, 'json');
 
+       return new Response($data, 200, [
+        'Content-Type' => 'application/json'
+    ]);
+    }
     /**
      * @Route("/{id}", name="caissier_show", methods={"GET"})
      */
@@ -120,8 +132,7 @@ class CaissierController extends AbstractController
     }
 
     /**
-     * @Route("//{id}", name="caissier_delete", methods={"DELETE"})
-     *  @ParamConverter("caissier", options={"mapping"={"id"="delete"}})
+     * @Route("/{id}", name="caissier_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Caissier $caissier): Response
     {
@@ -134,6 +145,6 @@ class CaissierController extends AbstractController
         return $this->redirectToRoute('caissier_index');
     }
 
-
+ 
     
 }
