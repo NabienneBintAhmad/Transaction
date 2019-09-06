@@ -1596,3 +1596,14 @@ aa4d73,127.0.0.1,GET,http://127.0.0.1:8000/api/retrait,1567774546,5699d9,200
 ab802a,127.0.0.1,GET,http://127.0.0.1:8000/api/retrait,1567774560,585b85,200
 585b85,127.0.0.1,POST,http://127.0.0.1:8000/api/retrait,1567774560,,404
 fc23d0,127.0.0.1,POST,http://127.0.0.1:8000/api/retrait,1567774627,,200
+6bddfa,127.0.0.1,GET,http://127.0.0.1:8001/api/listcaissier,1567782958,,200
+10079f,127.0.0.1,GET,http://127.0.0.1:8001/api/listtransaction,1567782985,d21ad0,200
+d21ad0,127.0.0.1,GET,http://127.0.0.1:8001/api/listtransaction,1567782985,,404
+83d479,127.0.0.1,GET,http://127.0.0.1:8001/api/listtransaction,1567783739,984f13,200
+984f13,127.0.0.1,GET,http://127.0.0.1:8001/api/listtransaction,1567783739,,404
+30ee6f,127.0.0.1,GET,http://127.0.0.1:8001/api/listtransaction,1567783802,5aea20,200
+5aea20,127.0.0.1,GET,http://127.0.0.1:8001/api/listtransaction,1567783802,,404
+48a075,127.0.0.1,GET,http://127.0.0.1:8001/api/listtransaction,1567783860,ce2370,200
+ce2370,127.0.0.1,GET,http://127.0.0.1:8001/api/listtransaction,1567783860,,404
+9d470e,127.0.0.1,GET,http://127.0.0.1:8001/api/listtransaction,1567784062,f48a7c,200
+f48a7c,127.0.0.1,GET,http://127.0.0.1:8001/api/listtransaction,1567784062,,404

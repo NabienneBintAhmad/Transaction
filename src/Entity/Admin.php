@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -32,18 +33,21 @@ class Admin
 
     /**
      * @ORM\Id()
+     * @Groups({"admin"})
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
+     * @Groups({"admin"})
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
     private $nom;
 
     /**
+     * @Groups({"admin"})
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
@@ -62,6 +66,7 @@ class Admin
     private $email;
 
     /**
+     * @Groups({"admin"})
      * @ORM\Column(type="bigint", unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(min=9, max=15)
@@ -69,6 +74,7 @@ class Admin
     private $contact;
 
     /**
+     * @Groups({"admin"})
      * @ORM\Column(type="bigint", unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(min=12, max=15)
@@ -77,11 +83,13 @@ class Admin
     private $cni;
 
     /**
+     * @Groups({"admin"})
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private $matricule;
 
     /**
+     * @Groups({"admin"})
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */

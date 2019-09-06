@@ -109,7 +109,7 @@ class DepotController extends AbstractController
     public function list(DepotRepository $depotRepository, SerializerInterface $serializer): Response
     {
        $list=$depotRepository->findAll();
-       $data=$serializer->serialize($list, 'json');
+       $data=$serializer->serialize($list, 'json', ['groups' => ['depot']]);
 
        return new Response($data, 200, [
         'Content-Type' => 'application/json'

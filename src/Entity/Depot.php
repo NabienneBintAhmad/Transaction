@@ -6,7 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\DepotRepository")
@@ -25,6 +25,7 @@ class Depot
 
     /**
      * @ORM\Id()
+     *  @Groups({"depot"})
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
@@ -34,21 +35,20 @@ class Depot
      * @ORM\Column(type="bigint")
      * @Assert\NotBlank()
      * //@Assert\Length(min=75000)
-     * 
-     * 
-     * 
-     * ")
+     *  @Groups({"depot"})
      */
     private $montant;
 
     /**
      * @ORM\Column(type="datetime")
+     *  @Groups({"depot"})
      */
     private $date;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Caissier", inversedBy="depots")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"depot"})
      */
     private $caissier;
 

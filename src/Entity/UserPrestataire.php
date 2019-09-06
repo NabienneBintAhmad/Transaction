@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -14,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 class UserPrestataire 
 {
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -21,37 +24,51 @@ class UserPrestataire
     private $id;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Prestataire", inversedBy="userPrestataires")
      * @ORM\JoinColumn(nullable=false)
      */
     private $matriculeEntreprise;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\Column(type="string", length=255)
      */
     private $nom;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\Column(type="string", length=255)
      */
     private $prenom;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\Column(type="bigint")
      */
     private $contact;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\Column(type="string", length=255)
      */
     private $email;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\Column(type="string", length=255)
      */
     private $Adresse;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\Column(type="bigint")
      */
     private $cni;
@@ -62,16 +79,22 @@ class UserPrestataire
     private $authent;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\Column(type="string", length=255)
      */
     private $matricule;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="serviceRetrait")
      */
     private $transactions;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"userpresta"})
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="userpresta")
      */
     private $users;

@@ -95,7 +95,7 @@ class CaissierController extends AbstractController
     public function list(CaissierRepository $caissierRepository, SerializerInterface $serializer): Response
     {
        $list=$caissierRepository->findAll();
-       $data=$serializer->serialize($list, 'json');
+       $data=$serializer->serialize($list, 'json',['groups' => ['caissier']]);
 
        return new Response($data, 200, [
         'Content-Type' => 'application/json'

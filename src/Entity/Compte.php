@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Compte
 {
     /**
+     * @Groups({"compte"})
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -21,16 +22,19 @@ class Compte
     private $id;
 
     /**
+     * @Groups({"compte"})
      * @ORM\Column(type="bigint", unique=true)
      */
     private $numero;
 
     /**
+     * @Groups({"compte"})
      * @ORM\Column(type="bigint")
      */
     private $solde;
 
     /**
+     * @Groups({"compte"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Prestataire", inversedBy="comptes")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -52,6 +56,7 @@ class Compte
     private $users;
 
     /**
+     * @Groups({"compte"})
      * @ORM\Column(type="datetime")
      */
     private $DateCreation;

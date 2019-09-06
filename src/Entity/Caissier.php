@@ -3,17 +3,16 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\CaissierRepository")
- *@UniqueEntity(fields={"email","matricule","contact"}, message="Cet utilisateur existe déjà")
  */
 class Caissier
 {
@@ -27,6 +26,7 @@ class Caissier
 
 
     /**
+     *  @Groups({"caissier"})
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -34,36 +34,42 @@ class Caissier
     private $id;
 
     /**
+     *  @Groups({"caissier"})
      * @ORM\Column(type="string", length=255)
      *  @Assert\NotBlank()
      */
     private $nom;
 
     /**
+     *  @Groups({"caissier"})
      * @ORM\Column(type="string", length=255)
      *  @Assert\NotBlank()
      */
     private $prenom;
 
     /**
+     *  @Groups({"caissier"})
      * @ORM\Column(type="string", length=255, unique=true)
      *  @Assert\NotBlank()
      */
     private $matricule;
 
     /**
+     *  @Groups({"caissier"})
      * @ORM\Column(type="string", length=255)
      *  @Assert\NotBlank()
      */
     private $adresse;
 
     /**
+     *  @Groups({"caissier"})
      * @ORM\Column(type="string", length=255, unique=true)
      *  @Assert\NotBlank()
      */
     private $email;
 
     /**
+     *  @Groups({"caissier"})
      * @ORM\Column(type="bigint", unique=true)
       * @Assert\NotBlank()
      * @Assert\Length(min=9, max=15)
@@ -71,6 +77,7 @@ class Caissier
     private $contact;
 
     /**
+     *  @Groups({"caissier"})
      * @ORM\Column(type="bigint", unique=true)
      * @Assert\NotBlank()
      * @Assert\Length(min=9, max=15)
@@ -80,6 +87,7 @@ class Caissier
    
 
     /**
+     *  @Groups({"caissier"})
      * @ORM\Column(type="string", length=255)
      *  @Assert\NotBlank()
      */
@@ -87,12 +95,14 @@ class Caissier
 
 
     /**
+     *  @Groups({"caissier"})
      * @ORM\OneToMany(targetEntity="App\Entity\Depot", mappedBy="caissier")
      *  @Assert\NotBlank()
      */
     private $depots;
 
     /**
+     * @Groups({"caissier"})
      * @ORM\OneToOne(targetEntity="App\Entity\User", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank()
@@ -100,6 +110,7 @@ class Caissier
     private $authent;
 
     /**
+     * @Groups({"caissier"})
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="caissier")
      */
     private $users;

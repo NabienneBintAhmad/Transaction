@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -14,23 +15,30 @@ use Doctrine\ORM\Mapping as ORM;
 class Tarif
 {
     /**
+     * @Groups({"transaction"})
      * @ORM\Id()
      * @ORM\GeneratedValue()
+     * @Groups({"tarif"})
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
+     * @Groups({"tarif"})
      * @ORM\Column(type="bigint")
      */
     private $BI;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"tarif"})
      * @ORM\Column(type="bigint")
      */
     private $BS;
 
     /**
+     * @Groups({"transaction"})
+     * @Groups({"tarif"})
      * @ORM\Column(type="bigint")
      */
     private $prix;

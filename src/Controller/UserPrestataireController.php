@@ -164,6 +164,18 @@ class UserPrestataireController extends AbstractController
         return new JsonResponse($data);
     }
 
+         /**
+     * @Route("/listuserpresta", name="transaction_list", methods={"GET"})
+     */
+    public function list(UserPrestataireRepository $userRepository, SerializerInterface $serializer): Response
+    {
+       $list=$userRepository->findAll();
+       $data=$serializer->serialize($list, 'json',['groups' => ['userpresta']]);
+
+       return new Response($data, 200, [
+        'Content-Type' => 'application/json'
+    ]);
+    }
 
     /**
      * @Route("/{id}", name="user_prestataire_show", methods={"GET"})

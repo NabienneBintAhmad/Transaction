@@ -325,7 +325,7 @@ class SecurityController extends AbstractFOSRestController
     public function listcompte(CompteRepository $compteRepository, SerializerInterface $serializer): Response
     {
        $list=$compteRepository->findAll();
-       $data=$serializer->serialize($list, 'json');
+       $data=$serializer->serialize($list, 'json', ['groups' => ['compte']]);
 
        return new Response($data, 200, [
         'Content-Type' => 'application/json'
@@ -337,7 +337,7 @@ class SecurityController extends AbstractFOSRestController
     public function listuser(UserRepository $userRepository, SerializerInterface $serializer): Response
     {
        $list=$userRepository->findAll();
-       $data=$serializer->serialize($list, 'json');
+       $data=$serializer->serialize($list, 'json' ,['groups' => ['user']]);
 
        return new Response($data, 200, [
         'Content-Type' => 'application/json'

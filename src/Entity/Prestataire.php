@@ -30,18 +30,21 @@ class Prestataire
 
     /**
      * @ORM\Id()
+     * @Groups({"prestataire"})
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
+     * @Groups({"prestataire"})
      * @ORM\Column(type="string", length=255)
       * @Assert\NotBlank()
      */
     private $nom;
 
     /**
+     * @Groups({"prestataire"})
      * @ORM\Column(type="string", length=255)
       * @Assert\NotBlank()
     
@@ -49,6 +52,7 @@ class Prestataire
     private $prenom;
 
     /**
+     * @Groups({"prestataire"})
      * @ORM\Column(type="string", length=255)
      *  @Assert\NotBlank()
      
@@ -56,6 +60,7 @@ class Prestataire
     private $nomEntreprise;
 
     /**
+     * @Groups({"prestataire"})
      * @ORM\Column(type="string", length=255)
       * @Assert\NotBlank()
      
@@ -63,11 +68,12 @@ class Prestataire
     private $adresse;
 
     /**
+     * @Groups({"prestataire"})
      * @ORM\Column(type="bigint", unique=true)
      * @Assert\Length(min=9, max=15)
      *  @Assert\NotBlank()
     * //@UniqueEntity(fields={"contact"}, message="Ce numero existe déjà")
-     * @Groups({"register"})
+    
      */
     private $contact;
 
@@ -76,7 +82,7 @@ class Prestataire
      * @Assert\Length(min=12, max=15)
      *  @Assert\NotBlank()
      * //@UniqueEntity(fields={"cni"}, message="Cette cni existe déjà")
-     * @Groups({"register"})
+     * @Groups({"prestataire"})
      */
     private $cni;
 
@@ -84,25 +90,27 @@ class Prestataire
      * @ORM\Column(type="string", length=255, unique=true)
      *  @Assert\NotBlank()
      * //@UniqueEntity(fields={"email"}, message="Cet email existe déjà")
-     * @Groups({"register"})
+     *@Groups({"prestataire"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * //@UniqueEntity(fields={"matricule"}, message="Cet matricule existe déjà")
-     * @Groups({"register"})
+     *@Groups({"prestataire"})
      */
     private $matricule;
 
 
     /**
      * @ORM\Column(type="bigint", unique=true)
+     * @Groups({"prestataire"})
      */
     private $compte;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Admin", inversedBy="prestataires")
+     * @Groups({"prestataire"})
      */
     private $admin;
 

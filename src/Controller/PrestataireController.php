@@ -60,7 +60,7 @@ class PrestataireController extends AbstractController
     public function list(PrestataireRepository $prestaRepository, SerializerInterface $serializer): Response
     {
        $list=$prestaRepository->findAll();
-       $data=$serializer->serialize($list, 'json');
+       $data=$serializer->serialize($list, 'json', ['groups' => ['prestataire']]);
 
        return new Response($data, 200, [
         'Content-Type' => 'application/json'
