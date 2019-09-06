@@ -99,9 +99,15 @@ class Caissier
      */
     private $authent;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="caissier")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->depots = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -247,6 +253,37 @@ class Caissier
     public function setAuthent(User $authent): self
     {
         $this->authent = $authent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setCaissier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getCaissier() === $this) {
+                $user->setCaissier(null);
+            }
+        }
 
         return $this;
     }

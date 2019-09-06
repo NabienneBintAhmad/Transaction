@@ -64,10 +64,10 @@ class Prestataire extends \App\Entity\Prestataire implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'nom', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'prenom', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'nomEntreprise', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'contact', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'cni', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'matricule', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'compte', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'admin', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'userPrestataires'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'nom', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'prenom', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'nomEntreprise', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'contact', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'cni', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'matricule', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'compte', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'admin', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'userPrestataires', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'users'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'nom', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'prenom', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'nomEntreprise', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'contact', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'cni', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'matricule', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'compte', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'admin', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'userPrestataires'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'nom', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'prenom', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'nomEntreprise', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'adresse', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'contact', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'cni', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'email', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'matricule', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'compte', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'admin', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'comptes', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'ninea', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'userPrestataires', '' . "\0" . 'App\\Entity\\Prestataire' . "\0" . 'users'];
     }
 
     /**
@@ -494,6 +494,39 @@ class Prestataire extends \App\Entity\Prestataire implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeUserPrestataire', [$userPrestataire]);
 
         return parent::removeUserPrestataire($userPrestataire);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUsers(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUsers', []);
+
+        return parent::getUsers();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addUser(\App\Entity\User $user): \App\Entity\Prestataire
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addUser', [$user]);
+
+        return parent::addUser($user);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeUser(\App\Entity\User $user): \App\Entity\Prestataire
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeUser', [$user]);
+
+        return parent::removeUser($user);
     }
 
 }

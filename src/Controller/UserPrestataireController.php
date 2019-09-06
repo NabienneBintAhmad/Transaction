@@ -54,6 +54,7 @@ class UserPrestataireController extends AbstractController
             $maxidresult = $idrep ->getResult();
             $maxid = ($maxidresult[0][1] + 1);
             $mat.="~USR@sENT".$maxid;
+                $userpresta = new UserPrestataire();
                 $user = new User();
                 $form=$this->createForm(UserType::class, $user);
                 $form->handleRequest($request);
@@ -68,11 +69,15 @@ class UserPrestataireController extends AbstractController
                     $user->setRoles(["ROLE_USER"]);
                     $user->setStatut("debloquer");
                     $user->setImageFile($file);
+                    $presta=$this->getUser()->getPrestataire();
+                    $admin=$this->getUser()->getAdmin();
+                    $user->setPrestataire($presta);
+                    $user->setAdmin($admin);
                     $user->setUpdatedAt(new \DateTime('now'));
 
 
 
-                $userpresta = new UserPrestataire();
+              
 
               
                 $form = $this->createForm(UserPrestataireType::class, $userpresta);
@@ -81,13 +86,15 @@ class UserPrestataireController extends AbstractController
                 $form->submit($data);
                 $userpresta->setMatricule($mat);
                 $userpresta->setAuthent($user);
-                $presta=$this->getUser()->getId();
-                //dump($presta);die();
-                $admin = $this->getDoctrine()->getRepository(Admin::class)->findOneBy(['authent'=>$presta]);
+                $connex=$this->getUser()->getPrestataire();
+               // $found=$this->getDoctrine()->getRepository(Prestataire::class)->find($connex);
+        //dump($connex);die();
+                //$admin = $this->getDoctrine()->getRepository(Admin::class)->findOneBy(['authent'=>$presta]);
+                //
                 
-                $multiservice = $this->getDoctrine()->getRepository(Prestataire::class)->find($admin);
-                //dump($multiservice);die(); 
-                $userpresta->setMatriculeEntreprise($multiservice);
+          //$multiservice = $this->getDoctrine()->getRepository(Prestataire::class)->findOneBy(['admin'=>$connex]);
+                //dump($connex);die(); 
+                $userpresta->setMatriculeEntreprise($connex);
             
                 if(!$userpresta->getAuthent())
                 {

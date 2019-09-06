@@ -56,12 +56,12 @@ class DepotController extends AbstractController
            
            //$depot->setMontant($values->montant);
            $connex=$this->getUser();
-             $connex->getId();
+            //  $connex->getId();
            
-            $caissier =$this->getDoctrine()->getRepository(Caissier::class)->findOneBy(['authent'=>  $connex->getId()]);
-            
+            $caissier =$this->getDoctrine()->getRepository(Caissier::class)->findOneBy(['authent'=>  $connex]);
+         
             $depot->setCaissier($caissier);
-           
+           dump($depot->setCaissier($caissier)); die();
             $compte = $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['numero'=>$data]);
            
             $depot->setCompte($compte);

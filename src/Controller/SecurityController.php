@@ -72,7 +72,7 @@ class SecurityController extends AbstractFOSRestController
        
         if(!$user)
         {
-            throw $this->createNotFoundException('User Not Found');
+            throw $this->createNotFoundException('Utilisateur pas trouvé!');
         }
         $isValid = $this->passwordEncoder->isPasswordValid($user, $values->password);
         
@@ -135,6 +135,9 @@ class SecurityController extends AbstractFOSRestController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator):Response
     {
+
+        $admin = new Admin();
+        $presta = new Prestataire();
         $mat = date('y');
         $idrep = $this->getDoctrine()->getRepository(Prestataire::class)->CreateQueryBuilder('a')
             ->select('Max(a.id)')
@@ -167,9 +170,11 @@ class SecurityController extends AbstractFOSRestController
                 $user->setStatut("debloquer");
                 $user->setImageFile($file);
                 $user->setUpdatedAt(new \DateTime('now'));
+                $user->setAdmin($admin);
+                $user->setPrestataire($presta);
+               
             
-            
-            $admin = new Admin();
+           
           
             $form = $this->createForm(AdminTpeType::class, $admin);
             $form->handleRequest($request);
@@ -178,6 +183,7 @@ class SecurityController extends AbstractFOSRestController
             $admin->setAuthent($user);
             $admin->setMatricule($mat); 
             $admin->setRole("Admin");
+            
             if(!$admin->getAuthent())
             {
                 $notfound = [
@@ -191,7 +197,7 @@ class SecurityController extends AbstractFOSRestController
             
 
 
-            $presta = new Prestataire();
+           
           
             $form = $this->createForm(PrestqtqireType::class, $presta);
             $form->handleRequest($request);

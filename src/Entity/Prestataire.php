@@ -124,11 +124,17 @@ class Prestataire
      */
     private $userPrestataires;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="prestataire")
+     */
+    private $users;
+
 
     public function __construct()
     {
         $this->comptes = new ArrayCollection();
         $this->userPrestataires = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -324,6 +330,37 @@ class Prestataire
             // set the owning side to null (unless already changed)
             if ($userPrestataire->getMatriculeEntreprise() === $this) {
                 $userPrestataire->setMatriculeEntreprise(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setPrestataire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getPrestataire() === $this) {
+                $user->setPrestataire(null);
             }
         }
 

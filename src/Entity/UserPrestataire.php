@@ -71,9 +71,15 @@ class UserPrestataire
      */
     private $transactions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="userpresta")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->transactions = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
 
@@ -216,6 +222,37 @@ class UserPrestataire
             // set the owning side to null (unless already changed)
             if ($transaction->getServiceRetrait() === $this) {
                 $transaction->setServiceRetrait(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setUserpresta($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            // set the owning side to null (unless already changed)
+            if ($user->getUserpresta() === $this) {
+                $user->setUserpresta(null);
             }
         }
 

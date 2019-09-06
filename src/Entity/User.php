@@ -91,6 +91,26 @@ class User implements UserInterface
      */
     private $compteTravail;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Admin", inversedBy="users")
+     */
+    private $admin;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Prestataire", inversedBy="users")
+     */
+    private $prestataire;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Caissier", inversedBy="users")
+     */
+    private $caissier;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\UserPrestataire", inversedBy="users")
+     */
+    private $userpresta;
+
     
 
   
@@ -229,6 +249,54 @@ class User implements UserInterface
     public function setCompteTravail(?Compte $compteTravail): self
     {
         $this->compteTravail = $compteTravail;
+
+        return $this;
+    }
+
+    public function getAdmin(): ?Admin
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(?Admin $admin): self
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    public function getPrestataire(): ?Prestataire
+    {
+        return $this->prestataire;
+    }
+
+    public function setPrestataire(?Prestataire $prestataire): self
+    {
+        $this->prestataire = $prestataire;
+
+        return $this;
+    }
+
+    public function getCaissier(): ?Caissier
+    {
+        return $this->caissier;
+    }
+
+    public function setCaissier(?Caissier $caissier): self
+    {
+        $this->caissier = $caissier;
+
+        return $this;
+    }
+
+    public function getUserpresta(): ?UserPrestataire
+    {
+        return $this->userpresta;
+    }
+
+    public function setUserpresta(?UserPrestataire $userpresta): self
+    {
+        $this->userpresta = $userpresta;
 
         return $this;
     }

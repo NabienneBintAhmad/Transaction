@@ -83,16 +83,16 @@ class TransactionController extends AbstractController
             $transaction->setLibelle('envoie') ; 
             $transaction->setStatut('Pas retiré!') ; 
           
-            $connex=$this->getUser();
+            $findcompte=$this->getUser()->getCompteTravail();
            // dump($connex);die();entityManager
-            $connex->getCompteTravail();
+            //$connex;
            // dump($connex->getCompteTravail()); die();
-            $findcompte= $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['id'=>$connex->getCompteTravail()]);
+            //$findcompte= $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['id'=>$connex]);
            // dump($findcompte);die();
-            $multiserv=$this->getUser();
-            $multiserv->getId();
-            $multiservice= $this->getDoctrine()->getRepository(UserPrestataire::class)->findOneBy(['authent'=> $multiserv->getId()]);
-         
+            $multiservi=$this->getUser()->getPrestataire();
+           // dump($multiservice);die();
+            $multiservice= $this->getDoctrine()->getRepository(UserPrestataire::class)->find($multiservi);
+           
             $transaction->setMultiservice($multiservice) ; 
             
             if(!$findcompte)
@@ -132,13 +132,16 @@ class TransactionController extends AbstractController
     {
         
       
-         $datas=$request->request->all();
-            $connex=$this->getUser();
-            $connex->getCompteTravail();
-            $findcompte= $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['id'=>$connex->getCompteTravail()]);
-            $multiserv=$this->getUser();
-            $multiserv->getId();
-            $multiservice= $this->getDoctrine()->getRepository(UserPrestataire::class)->findOneBy(['authent'=> $multiserv->getId()]);
+       // $transaction=new Transaction();
+        $datas=$request->request->all();
+        $findcompte=$this->getUser()->getCompteTravail();
+           
+           // $findcompte= $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['id'=>$connex->getCompteTravail()]);
+      
+        $multiserv=$this->getUser()->getPrestataire();
+        $multiservice= $this->getDoctrine()->getRepository(UserPrestataire::class)->find($multiserv);
+           
+           // $multiservice= $this->getDoctrine()->getRepository(UserPrestataire::class)->findOneBy(['authent'=> $multiserv->getPrestataire()]);
              if(!$multiservice)
              {
                  $notfound = [
@@ -162,17 +165,10 @@ class TransactionController extends AbstractController
         $envoyer=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['envoyeurNomComplet'=>$datas]);
         $recepteur=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['recepteurNomComplet'=>$datas]);
         $code=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['code'=>$datas]);
-       
-        $transaction=$this->getDoctrine()->getRepository(Transaction::class)->find($envoyer->getId());
-        $statut=$transaction->getStatut();
-        if($statut=="retiré"){
 
-            throw $this->createNotFoundException('Cette transaction est déja retiré!');
-       
-        }
-        $transaction->setServiceRetrait($multiservice) ; 
-        $transaction->setDateRetrait(new \DateTime()); 
-       
+         $transaction=$this->getDoctrine()->getRepository(Transaction::class)->findOneBy(['code'=>$datas]);
+       // dump($code->getCode());die();
+
           if(!$code)
         {
             throw $this->createNotFoundException('Ce code n\'existe pas sur la base de données!');
@@ -185,6 +181,16 @@ class TransactionController extends AbstractController
         {
             throw $this->createNotFoundException('Ce envoyeur n\'exite pas sur la base de données!');
         }
+        $statut=$transaction->getStatut();
+        if($statut=="retiré"){
+
+            throw $this->createNotFoundException('Cette transaction est déja retiré!');
+       
+        }
+        $transaction->setServiceRetrait($multiservice) ; 
+        $transaction->setDateRetrait(new \DateTime()); 
+       
+       
         $a=$datas['recepteurCni'];
        
        if($a)
