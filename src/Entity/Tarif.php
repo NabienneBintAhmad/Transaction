@@ -15,7 +15,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Tarif
 {
     /**
-     * @Groups({"transaction"})
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @Groups({"tarif"})
@@ -30,14 +29,14 @@ class Tarif
     private $BI;
 
     /**
-     * @Groups({"transaction"})
+     
      * @Groups({"tarif"})
      * @ORM\Column(type="bigint")
      */
     private $BS;
 
     /**
-     * @Groups({"transaction"})
+
      * @Groups({"tarif"})
      * @ORM\Column(type="bigint")
      */

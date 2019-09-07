@@ -240,8 +240,8 @@ class TransactionController extends AbstractController
     ];
     return new JsonResponse($data);
 }
-  /**
-     * @Route("/listtransaction", name="transaction_list", methods={"GET"})
+    /**
+     * @Route("/listtransac", name="transactionlist", methods={"GET","POST"})
      */
     public function list(TransactionRepository $transRepository, SerializerInterface $serializer): Response
     {
@@ -254,8 +254,8 @@ class TransactionController extends AbstractController
     ]);
     }
 
-    /**
-     * @Route("/{id}", name="transaction_show", methods={"GET"})
+     /**
+     * @Route("/{id}", name="transaction_show", methods={"GET"}, requirements={"id":"\d+"})
      */
     public function show(Transaction $transaction): Response
     {
@@ -265,7 +265,7 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="transaction_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="transaction_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
      */
     public function edit(Request $request, Transaction $transaction): Response
     {
@@ -285,7 +285,7 @@ class TransactionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="transaction_delete", methods={"DELETE"})
+     * @Route("/{id}", name="transaction_delete", methods={"DELETE"}, requirements={"id":"\d+"})
      */
     public function delete(Request $request, Transaction $transaction): Response
     {

@@ -92,7 +92,7 @@ class PrestataireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="prestataire_show", methods={"GET"})
+     * @Route("/{id}", name="prestataire_show", methods={"GET"}, requirements={"id":"\d+"})
      */
     public function show(Prestataire $prestataire): Response
     {
@@ -102,7 +102,7 @@ class PrestataireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="prestataire_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="prestataire_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
      */
     public function edit(Request $request, Prestataire $prestataire): Response
     {

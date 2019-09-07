@@ -13,8 +13,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Transaction
 {
     /**
+      * @Groups({"transaction"})
      * @ORM\Id()
-     * @Groups({"transaction"})
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
@@ -64,7 +64,7 @@ class Transaction
     private $multiservice;
 
     /**
-     * @Groups({"transaction"})@Groups({"transaction"})
+     * @Groups({"transaction"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Tarif", inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)
      */

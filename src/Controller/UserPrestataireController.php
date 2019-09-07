@@ -178,7 +178,7 @@ class UserPrestataireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="user_prestataire_show", methods={"GET"})
+     * @Route("/{id}", name="user_prestataire_show", methods={"GET"}, requirements={"id":"\d+"})
      */
     public function show(UserPrestataire $userPrestataire): Response
     {
@@ -188,7 +188,7 @@ class UserPrestataireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="user_prestataire_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="user_prestataire_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
      */
     public function edit(Request $request, UserPrestataire $userPrestataire): Response
     {
@@ -208,7 +208,7 @@ class UserPrestataireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="user_prestataire_delete", methods={"DELETE"})
+     * @Route("/{id}", name="user_prestataire_delete", methods={"DELETE"}, requirements={"id":"\d+"})
      */
     public function delete(Request $request, UserPrestataire $userPrestataire): Response
     {

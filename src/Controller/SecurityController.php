@@ -259,7 +259,7 @@ class SecurityController extends AbstractFOSRestController
     public function compte(Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        $values = json_decode($request->getContent());
+  
         $compte = new Compte();
       
         $compt = random_int(1000000000, 9999999999);
@@ -270,7 +270,6 @@ class SecurityController extends AbstractFOSRestController
         $compte->setDateCreation(new \DateTime()); 
         $compte->setNumero($compt);
         $compte->setSolde(0);
-        $compte->setDateCreation(new \DateTime()); 
         $proprietaire = $this->getDoctrine()->getRepository(Prestataire::class)->findOneBy(['matricule'=>$data]);
         $compte->setProprietaire($proprietaire);
   
@@ -325,6 +324,7 @@ class SecurityController extends AbstractFOSRestController
     public function listcompte(CompteRepository $compteRepository, SerializerInterface $serializer): Response
     {
        $list=$compteRepository->findAll();
+      // dump($list);die();
        $data=$serializer->serialize($list, 'json', ['groups' => ['compte']]);
 
        return new Response($data, 200, [
@@ -369,30 +369,4 @@ class SecurityController extends AbstractFOSRestController
        
     }
 
-
-
-
-   /*  public function checkPreAuth(UserInterface $user)
-    {
-        if (!$user instanceof AppUser) {
-            return;
-        }
-
-        // user is deleted, show a generic Account Not Found message.
-        if ($user->isDeleted()) {
-            throw new AccountDeletedException();
-        }
-    }
-
-    public function checkPostAuth(UserInterface $user)
-    {
-        if (!$user instanceof AppUser) {
-            return;
-        }
-
-        // user account is expired, the user may be notified
-        if ($user->isExpired()) {
-            throw new AccountExpiredException('...');
-        }
-    } */
 }

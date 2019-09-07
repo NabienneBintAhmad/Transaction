@@ -117,7 +117,7 @@ class DepotController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="depot_show", methods={"GET"})
+     * @Route("/{id}", name="depot_show", methods={"GET"}, requirements={"id":"\d+"})
      *  //@ParamConverter("depot", class="SensioBlogBundle:Depot")
      */
     public function show(Depot $depot): Response
@@ -128,7 +128,7 @@ class DepotController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="depot_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="depot_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
      */
     public function edit(Request $request, Depot $depot): Response
     {
@@ -148,7 +148,7 @@ class DepotController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="depot_delete", methods={"DELETE"})
+     * @Route("/{id}", name="depot_delete", methods={"DELETE"}, requirements={"id":"\d+"})
      */
     public function delete(Request $request, Depot $depot): Response
     {

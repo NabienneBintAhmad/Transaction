@@ -45,6 +45,7 @@ class CaissierController extends AbstractController
         $maxidresult = $idrep->getResult();
         $maxid = ($maxidresult[0][1] + 1);
         $mat .= "-CA@ssI" . $maxid;
+        $caissier = new Caissier();
         $user = new User();
             $form=$this->createForm(UserType::class, $user);
             $form->handleRequest($request);
@@ -58,13 +59,12 @@ class CaissierController extends AbstractController
                     ));
                 $user->setRoles(["ROLE_CAISSIER"]);
                 $user->setStatut("debloquer");
+                $user->setCaissier($caissier);
                 $user->setImageFile($file);
                 $user->setUpdatedAt(new \DateTime('now'));
-                $entityManager=$this->getDoctrine()->getManager();
-               $entityManager->persist($user);
-               $entityManager->flush();
+                $entityManager->persist($user);
 
-            $caissier = new Caissier();
+          
             
             $form = $this->createForm(CaissierType::class, $caissier);
             $form->handleRequest($request);
@@ -84,7 +84,8 @@ class CaissierController extends AbstractController
             }
             $entityManager=$this->getDoctrine()->getManager();
             $entityManager->persist($caissier);
-            $entityManager->flush(); 
+           
+            $entityManager->flush();
 
             return new Response('Inserré',Response::HTTP_CREATED);
     }
@@ -102,7 +103,7 @@ class CaissierController extends AbstractController
     ]);
     }
     /**
-     * @Route("/{id}", name="caissier_show", methods={"GET"})
+     * @Route("/{id}", name="caissier_show", methods={"GET"}, requirements={"id":"\d+"})
      */
     public function show(Caissier $caissier): Response
     {
@@ -112,7 +113,7 @@ class CaissierController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="caissier_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="caissier_edit", methods={"GET","POST"}, requirements={"id":"\d+"})
      */
     public function edit(Request $request, Caissier $caissier): Response
     {
@@ -132,7 +133,7 @@ class CaissierController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="caissier_delete", methods={"DELETE"})
+     * @Route("/{id}", name="caissier_delete", methods={"DELETE"}, requirements={"id":"\d+"})
      */
     public function delete(Request $request, Caissier $caissier): Response
     {
