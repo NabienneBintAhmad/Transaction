@@ -86,8 +86,16 @@ class SecurityController extends AbstractFOSRestController
         }
     if($isValid==true)
     {
-       // dump($user);die();
-      // dump($user->getCompteTravail()->getId());die();
+      $admin=$user->getAdmin(); 
+      if(!empty($admin)){
+
+          $foundstatut=$admin->getAuthent()->getStatut();
+          if($foundstatut=="Bloquer"){
+            throw $this->createNotFoundException('Vous ne pouvez pas accepder votre entreprise a été bloquée!');
+
+          }
+
+      }
       $compte =$user->getCompteTravail(); 
       if (!empty($compte) ) {
       $token = $JWTEncoder->encode([
@@ -122,10 +130,7 @@ class SecurityController extends AbstractFOSRestController
     return $this->json([
         'token' => $token
     ]);
-    if(!$isValid)
-    {
-        throw $this->createNotFoundException('Mot de passe incorrecte');
-    }
+   
 
     }
 
