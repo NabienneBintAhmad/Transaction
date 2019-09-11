@@ -74,6 +74,7 @@ class UserPrestataire
     private $cni;
 
     /**
+     *  @Groups({"userpresta"})
      * @ORM\OneToOne(targetEntity="App\Entity\User", cascade={"persist", "remove"})
      */
     private $authent;

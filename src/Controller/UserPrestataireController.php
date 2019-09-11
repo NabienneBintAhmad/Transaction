@@ -165,14 +165,14 @@ class UserPrestataireController extends AbstractController
     }
 
          /**
-     * @Route("/listuserpresta", name="transaction_list", methods={"GET"})
+     * @Route("/listuserpresta", name="userprestalist", methods={"GET"})
      */
     public function list(UserPrestataireRepository $userRepository, SerializerInterface $serializer): Response
     {
        
         $user=$this->getUser()->getAdmin();
-        $list=$userRepository->findAll($user);
-       $data=$serializer->serialize($list, 'json',['groups' => ['userpresta']]);
+        $list=$userRepository->findBy(['matriculeEntreprise'=>$user]);
+        $data=$serializer->serialize($list, 'json',['groups' => ['userpresta']]);
 
        return new Response($data, 200, [
         'Content-Type' => 'application/json'

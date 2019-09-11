@@ -311,12 +311,15 @@ class SecurityController extends AbstractFOSRestController
 
     public function bloquer(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository)
     {
-    
+        $values = json_decode($request->getContent());
+        $user = new User();
+        $form=$this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
         $datas=$request->request->all();
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=>$datas]);
-       if(!$user)
+      if(!$user)
         {
-            throw $this->createNotFoundException('Utilisateur non trouvé !');
+            throw $this->createNotFoundException('User Not Found');
         }
         $user->SetStatut("Bloquer");
         $entityManager->flush();
@@ -347,13 +350,46 @@ class SecurityController extends AbstractFOSRestController
     public function listuser(UserRepository $userRepository, SerializerInterface $serializer): Response
     {
        $list=$userRepository->findAll();
-       
-       $data=$serializer->serialize($list, 'json' ,['groups' => ['user']]);
 
-       return new Response($data, 200, [
-        'Content-Type' => 'application/json'
-    ]);
-    }
+      foreach($list as $values){
+       if($values->getRoles()==['ROLE_ADMIN'] || $values->getRoles()==['ROLE_CAISSIER']){
+        $tab[] = $values;
+       $data=$serializer->serialize($tab, 'json' ,['groups' => ['user']]);   
+
+           }
+    
+        }
+            return new Response($data, 200, [
+             'Content-Type' => 'application/json'
+         ]);
+
+    } 
+
+
+     /**
+     * @Route("/blockuser", name="block", methods={"GET"})
+     */
+    public function blockuser(UserRepository $userRepository, SerializerInterface $serializer): Response
+    {
+       
+        $user=$this->getUser()->getAdmin();
+        $list=$userRepository->findBy(['admin'=>$user]);
+        //dump($list);die();
+        foreach($list as $values){
+         
+            if($values->getRoles()==['ROLE_USER']){
+             $tab[] = $values;
+
+            $data=$serializer->serialize($tab, 'json' ,['groups' => ['user']]);   
+     
+                }
+         
+             }
+                 return new Response($data, 200, [
+                  'Content-Type' => 'application/json'
+              ]);
+     
+         } 
 
     /**
       * @Route("/debloquer", name="debloquer", methods={"POST"})
