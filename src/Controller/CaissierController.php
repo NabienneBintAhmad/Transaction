@@ -90,8 +90,7 @@ class CaissierController extends AbstractController
             return new Response('Inserré',Response::HTTP_CREATED);
     }
 /**
-     * @Route("/listcaissier", name="caissier_list", methods={"GET"})
-   
+     * @Route("/listcaissier", name="caissierlist", methods={"GET"})
      */
     public function list(CaissierRepository $caissierRepository, SerializerInterface $serializer): Response
     {

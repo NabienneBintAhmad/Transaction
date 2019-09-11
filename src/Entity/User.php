@@ -7,8 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -26,17 +26,20 @@ class User implements UserInterface
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
+     * @Groups({"user"})
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"user"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"user"})
      */
     private $roles = [];
 
@@ -48,6 +51,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user"})
      */
     private $statut;
 
@@ -75,7 +79,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     *
+     *@Groups({"user"})
      * @var string
      */
     private $imageName;
@@ -83,6 +87,7 @@ class User implements UserInterface
    
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"user"})
      */
     private $updatedAt;
 
@@ -93,21 +98,25 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Admin", inversedBy="users")
+   
      */
     private $admin;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Prestataire", inversedBy="users")
+ 
      */
     private $prestataire;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Caissier", inversedBy="users")
+   
      */
     private $caissier;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\UserPrestataire", inversedBy="users")
+  
      */
     private $userpresta;
 

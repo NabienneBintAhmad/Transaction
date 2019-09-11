@@ -169,7 +169,9 @@ class UserPrestataireController extends AbstractController
      */
     public function list(UserPrestataireRepository $userRepository, SerializerInterface $serializer): Response
     {
-       $list=$userRepository->findAll();
+       
+        $user=$this->getUser()->getAdmin();
+        $list=$userRepository->findAll($user);
        $data=$serializer->serialize($list, 'json',['groups' => ['userpresta']]);
 
        return new Response($data, 200, [

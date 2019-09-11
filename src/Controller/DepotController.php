@@ -61,7 +61,7 @@ class DepotController extends AbstractController
             $caissier =$this->getDoctrine()->getRepository(Caissier::class)->findOneBy(['authent'=>  $connex]);
          
             $depot->setCaissier($caissier);
-           dump($depot->setCaissier($caissier)); die();
+           //dump($depot->setCaissier($caissier)); die();
             $compte = $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['numero'=>$data]);
            
             $depot->setCompte($compte);
@@ -108,8 +108,11 @@ class DepotController extends AbstractController
      */
     public function list(DepotRepository $depotRepository, SerializerInterface $serializer): Response
     {
-       $list=$depotRepository->findAll();
-       $data=$serializer->serialize($list, 'json', ['groups' => ['depot']]);
+        $depot=$this->getUser()->getCaissier();
+       // dump($depot);
+        //$liste = $userRepository->findBy(["partenaire" => $partuser]);
+        $list=$depotRepository->find($depot);
+        $data=$serializer->serialize($list, 'json', ['groups' => ['depot']]);
 
        return new Response($data, 200, [
         'Content-Type' => 'application/json'

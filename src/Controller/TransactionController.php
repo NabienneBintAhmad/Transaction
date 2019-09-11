@@ -245,7 +245,8 @@ class TransactionController extends AbstractController
      */
     public function list(TransactionRepository $transRepository, SerializerInterface $serializer): Response
     {
-       $list=$transRepository->findAll();
+        $trans=$this->getUser()->getPrestataire();
+         $list=$transRepository->find($trans);
        $data=$serializer->serialize($list, 'json',
        ['groups' => ['transaction']]);
 

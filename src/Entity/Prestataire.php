@@ -122,8 +122,7 @@ class Prestataire
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      *  @Assert\NotBlank()
-     *  //@UniqueEntity(fields={"ninea"}, message="Ce ninea existe déjà")
-     * @Groups({"register"})
+     * @Groups({"prestataire"})
      */
     private $ninea;
 

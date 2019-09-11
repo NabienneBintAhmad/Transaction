@@ -65,7 +65,9 @@ class SecurityController extends AbstractFOSRestController
     {
 
         $values = json_decode($request->getContent());
+     
         $data = $request->request->all();
+      
         
 
         $user =$this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=>$data]);
@@ -86,16 +88,19 @@ class SecurityController extends AbstractFOSRestController
         }
     if($isValid==true)
     {
-      $admin=$user->getAdmin(); 
-      if(!empty($admin)){
 
-          $foundstatut=$admin->getAuthent()->getStatut();
-          if($foundstatut=="Bloquer"){
-            throw $this->createNotFoundException('Vous ne pouvez pas accepder votre entreprise a été bloquée!');
-
-          }
-
-      }
+        $admin=$user->getAdmin(); 
+        if(!empty($admin)){
+  
+            $foundstatut=$admin->getAuthent()->getStatut();
+            if($foundstatut=="Bloquer"){
+              throw $this->createNotFoundException('Vous ne pouvez pas accepder votre entreprise a été bloquée!');
+  
+            }
+  
+        }
+       // dump($user);die();
+      // dump($user->getCompteTravail()->getId());die();
       $compte =$user->getCompteTravail(); 
       if (!empty($compte) ) {
       $token = $JWTEncoder->encode([
@@ -130,7 +135,10 @@ class SecurityController extends AbstractFOSRestController
     return $this->json([
         'token' => $token
     ]);
-   
+    if(!$isValid)
+    {
+        throw $this->createNotFoundException('Mot de passe incorrecte');
+    }
 
     }
 
@@ -303,15 +311,12 @@ class SecurityController extends AbstractFOSRestController
 
     public function bloquer(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository)
     {
-        $values = json_decode($request->getContent());
-        $user = new User();
-        $form=$this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+    
         $datas=$request->request->all();
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=>$datas]);
-      if(!$user)
+       if(!$user)
         {
-            throw $this->createNotFoundException('User Not Found');
+            throw $this->createNotFoundException('Utilisateur non trouvé !');
         }
         $user->SetStatut("Bloquer");
         $entityManager->flush();
@@ -337,11 +342,12 @@ class SecurityController extends AbstractFOSRestController
     ]);
     }
      /**
-     * @Route("/listuser", name="user_list", methods={"GET"})
+     * @Route("/listusersystem", name="user_list", methods={"GET"})
      */
     public function listuser(UserRepository $userRepository, SerializerInterface $serializer): Response
     {
        $list=$userRepository->findAll();
+       
        $data=$serializer->serialize($list, 'json' ,['groups' => ['user']]);
 
        return new Response($data, 200, [
