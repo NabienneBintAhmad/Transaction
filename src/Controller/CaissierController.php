@@ -58,7 +58,7 @@ class CaissierController extends AbstractController
                         $form->get('password')->getData()
                     ));
                 $user->setRoles(["ROLE_CAISSIER"]);
-                $user->setStatut("debloquer");
+                $user->setStatut("Debloquer");
                 $user->setCaissier($caissier);
                 $user->setImageFile($file);
                 $user->setUpdatedAt(new \DateTime('now'));

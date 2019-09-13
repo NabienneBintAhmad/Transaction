@@ -28,6 +28,7 @@ return [
     'depot_delete' => [['id'], ['_controller' => 'App\\Controller\\DepotController::delete'], ['id' => '\\d+'], [['variable', '/', '\\d+', 'id', true], ['text', '/api']], [], []],
     'prestataire_index' => [[], ['_controller' => 'App\\Controller\\PrestataireController::index'], [], [['text', '/api/']], [], []],
     'prestataire_list' => [[], ['_controller' => 'App\\Controller\\PrestataireController::list'], [], [['text', '/api/listpresta']], [], []],
+    'mycounts' => [[], ['_controller' => 'App\\Controller\\PrestataireController::mycount'], [], [['text', '/api/mycount']], [], []],
     'prestataire_new' => [[], ['_controller' => 'App\\Controller\\PrestataireController::new'], [], [['text', '/api/new']], [], []],
     'prestataire_show' => [['id'], ['_controller' => 'App\\Controller\\PrestataireController::show'], ['id' => '\\d+'], [['variable', '/', '\\d+', 'id', true], ['text', '/api']], [], []],
     'prestataire_edit' => [['id'], ['_controller' => 'App\\Controller\\PrestataireController::edit'], ['id' => '\\d+'], [['text', '/edit'], ['variable', '/', '\\d+', 'id', true], ['text', '/api']], [], []],

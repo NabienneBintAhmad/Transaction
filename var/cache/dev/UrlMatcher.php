@@ -24,6 +24,7 @@ return [
             [['_route' => 'user_prestataire_index', '_controller' => 'App\\Controller\\UserPrestataireController::index'], null, ['GET' => 0], null, true, false, null],
         ],
         '/api/listpresta' => [[['_route' => 'prestataire_list', '_controller' => 'App\\Controller\\PrestataireController::list'], null, ['GET' => 0], null, false, false, null]],
+        '/api/mycount' => [[['_route' => 'mycounts', '_controller' => 'App\\Controller\\PrestataireController::mycount'], null, ['GET' => 0], null, false, false, null]],
         '/api/new' => [[['_route' => 'prestataire_new', '_controller' => 'App\\Controller\\PrestataireController::new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/api/login_check' => [[['_route' => 'login', '_controller' => 'App\\Controller\\SecurityController::login'], null, ['POST' => 0], null, false, false, null]],
         '/api/register' => [[['_route' => 'register', '_controller' => 'App\\Controller\\SecurityController::register'], null, ['POST' => 0], null, false, false, null]],

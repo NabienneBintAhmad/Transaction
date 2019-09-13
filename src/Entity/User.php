@@ -92,6 +92,7 @@ class User implements UserInterface
     private $updatedAt;
 
     /**
+     * @Groups({"user"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Compte", inversedBy="users")
      */
     private $compteTravail;

@@ -10,6 +10,7 @@ use App\Entity\Prestataire;
 use App\Repository\PrestataireRepository;
 use App\Entity\UserPrestataire;
 use App\Form\UserPrestataireType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UserPrestataireRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,7 +68,7 @@ class UserPrestataireController extends AbstractController
                             $form->get('password')->getData()
                         ));
                     $user->setRoles(["ROLE_USER"]);
-                    $user->setStatut("debloquer");
+                    $user->setStatut("Debloquer");
                     $user->setImageFile($file);
                     $presta=$this->getUser()->getPrestataire();
                     $admin=$this->getUser()->getAdmin();
@@ -131,35 +132,45 @@ class UserPrestataireController extends AbstractController
 
     /**
      * @Route("/comptetravail", name="comptetravail", methods={"POST"})
-     * @IsGranted("ROLE_ADMIN")
+     * //@IsGranted("ROLE_ADMIN")
      */
-    public function comptetravail(Request $request,EntityManagerInterface $entityManager, UserPrestataireRepository $userRepository)
+    public function comptetravail(Request $request,EntityManagerInterface $entityManager, UserRepository $userRepository)
     {
-        $cmpttrav = new UserPrestataire();
-
-        $form=$this->createForm(UserPrestataireType::class, $cmpttrav);
-        $form->handleRequest($request);
+      
+        $user=new User();
+        //$form=$this->createForm(UserPrestataireType::class, $cmpttrav);
+        /* $form->handleRequest($request); */
         $datas=$request->request->all();
-        $form->submit($datas); 
-        $values = json_decode($request->getContent());
-        $cmpttrav = $userRepository->findOneByemail($values->email);
-        if(!$cmpttrav)
+        //$form->submit($datas); 
+       // $values = json_decode($request->getContent());
+        $user= $userRepository->findOneBy(['username'=>$datas]);
+        
+        if(!$user)
         {
             throw $this->createNotFoundException('utilisateur non trouvé!!');
         }
     
-        $compte = $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['numero'=>$values->comptetravail]);
+        $compte = $this->getDoctrine()->getRepository(Compte::class)->findOneBy(['numero'=>$datas]);
+       // dump($compte);
         if(!$compte)
         {
             throw $this->createNotFoundException('compte non trouvé!!');
         }
-        $cmpttrav->setCompteDeTravail($compte);
-      
-        $entityManager->flush();
+       if($user->getPrestataire()==$compte->getProprietaire()){
 
+        $user->setCompteTravail($compte);
+        $entityManager->flush();
         $data = [
             'status' => 201,
             'message' => ' Le compte a été associé à l\'utilisateur'
+        ];
+        return new JsonResponse($data);
+
+       }
+        
+        $data = [
+            'status' => 400,
+            'message' => ' Le compte n\'appartient pas au patron de cet utilisateur!'
         ];
         return new JsonResponse($data);
     }

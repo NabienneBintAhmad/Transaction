@@ -180,7 +180,7 @@ class SecurityController extends AbstractFOSRestController
                         $form->get('password')->getData()
                     ));
                 $user->setRoles(['ROLE_ADMIN']);
-                $user->setStatut("debloquer");
+                $user->setStatut("Debloquer");
                 $user->setImageFile($file);
                 $user->setUpdatedAt(new \DateTime('now'));
                 $user->setAdmin($admin);

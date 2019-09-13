@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Prestataire;
+use App\Entity\Compte;
 use App\Form\PrestataireType;
+use App\Form\CompteType;
 use App\Repository\PrestataireRepository;
+use App\Repository\CompteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -62,6 +65,19 @@ class PrestataireController extends AbstractController
        $list=$prestaRepository->findAll();
        $data=$serializer->serialize($list, 'json', ['groups' => ['prestataire']]);
 
+       return new Response($data, 200, [
+        'Content-Type' => 'application/json'
+    ]);
+    }
+
+     /**
+     * @Route("/mycount", name="mycounts", methods={"GET"})
+     */
+    public function mycount(CompteRepository $countRepository, SerializerInterface $serializer): Response
+    {
+        $user=$this->getUser()->getPrestataire();
+       $list=$countRepository->findBy(['proprietaire'=>$user]);
+       $data=$serializer->serialize($list, 'json', ['groups' => ['compte']]);
        return new Response($data, 200, [
         'Content-Type' => 'application/json'
     ]);

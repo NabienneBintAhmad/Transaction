@@ -110,8 +110,8 @@ class DepotController extends AbstractController
     {
         $depot=$this->getUser()->getCaissier();
        // dump($depot);
-        //$liste = $userRepository->findBy(["partenaire" => $partuser]);
-        $list=$depotRepository->find($depot);
+        $list = $depotRepository->findBy(["caissier" => $depot]);
+        //$list=$depotRepository->find($depot);
         $data=$serializer->serialize($list, 'json', ['groups' => ['depot']]);
 
        return new Response($data, 200, [
