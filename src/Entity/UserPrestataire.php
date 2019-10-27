@@ -82,6 +82,8 @@ class UserPrestataire
     /**
      * @Groups({"transaction"})
      * @Groups({"userpresta"})
+     * @Groups({"retrait"})
+     * @Groups({"envoie"})
      * @ORM\Column(type="string", length=255)
      */
     private $matricule;

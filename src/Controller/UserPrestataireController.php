@@ -74,6 +74,7 @@ class UserPrestataireController extends AbstractController
                     $admin=$this->getUser()->getAdmin();
                     $user->setPrestataire($presta);
                     $user->setAdmin($admin);
+                    $user->setUserpresta($userpresta);
                     $user->setUpdatedAt(new \DateTime('now'));
 
 

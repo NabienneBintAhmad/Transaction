@@ -67,18 +67,16 @@ class SecurityController extends AbstractFOSRestController
         $values = json_decode($request->getContent());
      
         $data = $request->request->all();
-      
-        
 
         $user =$this->getDoctrine()->getRepository(User::class)->findOneBy(['username'=>$data]);
-       
+      
         if(!$user)
         {
             throw $this->createNotFoundException('Utilisateur pas trouvé!');
         }
         $isValid = $this->passwordEncoder->isPasswordValid($user, $values->password);
         
-        
+      
     if ($user->getStatut()=="Bloquer") {
         throw $this->createNotFoundException('Accès refusé !!! Vous etes bloqué!!!');
     }
@@ -144,7 +142,6 @@ class SecurityController extends AbstractFOSRestController
 
     /**
      * @Route("/register", name="register", methods={"POST"})
-     * //@IsGranted("ROLE_SUPERADMIN")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator):Response
     {
@@ -415,5 +412,7 @@ class SecurityController extends AbstractFOSRestController
         return new JsonResponse($data);
        
     }
+
+    /*   *@IsGranted("ROLE_SUPERADMIN") */
 
 }

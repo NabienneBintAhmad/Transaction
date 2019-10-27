@@ -21,57 +21,62 @@ class Transaction
     private $id;
     
     /**
-     * @Groups({"transaction"})
+   
+     * @Groups({"envoie"})
      * @ORM\Column(type="datetime")
      */
     private $date;
 
     /**
-     * @Groups({"transaction"})
+     *  * @Groups({"retrait"})
+     * @Groups({"envoie"})
      * @ORM\Column(type="bigint")
      */
     private $montant;
 
     /**
-     * @Groups({"transaction"})
+     *  * @Groups({"retrait"})
+     * @Groups({"envoie"})
      * @ORM\Column(type="string", length=255)
      */
     private $envoyeurNomComplet;
 
     /**
-     * @Groups({"transaction"})
+     * @Groups({"envoie"})
      * @ORM\Column(type="bigint")
      */
     private $envoyeurCni;
 
     /**
-     * @Groups({"transaction"})
+     *  * @Groups({"retrait"})
+     * @Groups({"envoie"})
      * @ORM\Column(type="string", length=255)
      */
     private $recepteurNomComplet;
 
     /**
-     * @Groups({"transaction"})
+     * @Groups({"retrait"})
      * @ORM\Column(type="bigint" , nullable=true)
      */
     private $recepteurCni;
 
     /**
-     * @Groups({"transaction"})
+     * @Groups({"envoie"})
      * @ORM\ManyToOne(targetEntity="App\Entity\UserPrestataire", inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $multiservice;
 
     /**
-     * @Groups({"transaction"})
+     * @Groups({"retrait"})
+     * @Groups({"envoie"})
      * @ORM\ManyToOne(targetEntity="App\Entity\Tarif", inversedBy="transactions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $commission;
 
     /**
-     * @Groups({"transaction"})
+     * @Groups({"envoie"})
      * @ORM\Column(type="bigint")
      */
     private $code;
@@ -83,7 +88,7 @@ class Transaction
     private $libelle;
 
     /**
-     * @Groups({"transaction"})
+     * @Groups({"retrait"})
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateRetrait;
@@ -95,7 +100,7 @@ class Transaction
     private $statut;
 
     /**
-     * @Groups({"transaction"})
+     * @Groups({"retrait"})
      * @ORM\ManyToOne(targetEntity="App\Entity\UserPrestataire", inversedBy="transactions")
      *  @ORM\JoinColumn(nullable=true)
      */

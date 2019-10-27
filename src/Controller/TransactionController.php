@@ -125,6 +125,63 @@ class TransactionController extends AbstractController
     return new Response('Pas envoyé! Votre compte ne vous le permet pas',Response::HTTP_UNAUTHORIZED);
   }
     }
+
+
+    /**
+     * @Route("/infotarif", name="infotarif", methods={"GET","POST"})
+     */
+    public function infotarif(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer){
+    $value = json_decode($request->getContent());
+        $montant= $value->montant;
+        $taxe = $this->getDoctrine()->getRepository(Tarif::class)->findAll();
+        foreach ($taxe as $values) 
+  {
+      $values->getBI();
+      $values->getBS();
+      $values->getPrix();
+      if ($montant >= $values->getBI() && $montant <= $values->getBS()) 
+      {
+          $tarif= $values;
+          break;
+      }
+  }
+  $data = $serializer->serialize($tarif, 'json');
+  return new Response($data,200, [
+      'Content-Type' => 'application/json'
+  ]);
+
+        }
+
+/**
+     * @Route("/inforetrait", name="inforetrait", methods={"GET","POST"})
+     */
+    public function inforetrait(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator, SerializerInterface $serializer){
+        $value = json_decode($request->getContent());
+            $code= $value->code;
+            // $envoyeurNomComplet= $value->envoyeurNomComplet;
+            // $recepteurNomComplet= $value->recepteurNomComplet;
+            $info = $this->getDoctrine()->getRepository(Transaction::class)->findAll();
+            foreach ($info as $values) 
+      {
+          $values->getStatut();
+          $values->getRecepteurNomComplet();
+          $values->getEnvoyeurNomComplet();
+          $values->getCode();
+          $values->getMontant();
+          if ($code==$values->getcode()) 
+          {
+              $inforetrait= $values;
+              break;
+          }
+      }
+      $data = $serializer->serialize($inforetrait, 'json');
+      return new Response($data,200, [
+          'Content-Type' => 'application/json'
+      ]);
+    
+            }
+
+
     /**
      * @Route("/retrait", name="retrait", methods={"GET","POST"})
      */
@@ -179,7 +236,7 @@ class TransactionController extends AbstractController
         }
         if(!$recepteur)
         {
-            throw $this->createNotFoundException('Ce envoyeur n\'exite pas sur la base de données!');
+            throw $this->createNotFoundException('Ce recepteur n\'exite pas sur la base de données!');
         }
         $statut=$transaction->getStatut();
         if($statut=="retiré"){
@@ -299,5 +356,100 @@ class TransactionController extends AbstractController
         return $this->redifindcomptetToRoute('transaction_index');
     }
 
+
+    /**
+     * @Route("/listerperiodeEnvoie", name="listerperiodeEnvoie", methods={"POST", "GET"})
+     */
+
+    public function listerperiode(ValidatorInterface $validator, Request $request, TransactionRepository $transRepository,SerializerInterface $serializer)
+    {
+        $values = json_decode($request->getContent(),true);
+
+        $debut=$values['debut'];
+        $fin = $values['fin'];
+        //dump($values);
+        $user =$this->getUser()->getUserpresta()->getId();
+        // dump($user);
+        $debut=(new \DateTime($debut));
+        $fin=(new \DateTime($fin));
+
+        $transaction = $transRepository->findByPeriode($debut,$fin,$user);
+       // dump($transaction);
+        $data = $serializer->serialize($transaction, 'json',['groups'=>['envoie']]);
+
+      
+      return new Response(
+          $data,
+          200,
+          [
+              'Content-Type' => 'application/json'
+          ]
+      );
+    }
+
+
+ /**
+     * @Route("/listerperiodeEnvoieAdmin", name="listerperiodeEnvoieAdmin", methods={"POST", "GET"})
+     */
+
+    public function listerperiodeEnvoieAdmin(ValidatorInterface $validator, Request $request, TransactionRepository $transRepository,SerializerInterface $serializer)
+    {
+        $values = json_decode($request->getContent(),true);
+
+        $debut=$values['debut'];
+        $fin = $values['fin'];
+        $user =$this->getUser()->getUserpresta()->getId();
+        // dump($user);
+        $debut=(new \DateTime($debut));
+        $fin=(new \DateTime($fin));
+
+        $transaction = $transRepository->findByPeriode($debut,$fin,$user);
+        $data = $serializer->serialize($transaction, 'json',['groups'=>['envoie']]);
+
+        $list=$transRepository->findBy(['multiservice'=>$user]);
+//$list->getMultiservice();
+        dump($list);
+      
+      return new Response(
+          $data,
+          200,
+          [
+              'Content-Type' => 'application/json'
+          ]
+      );
+    }
+
+
+
+    /**
+     * @Route("/listerperiodeRetrait", name="listerperiodeRetrait", methods={"POST", "GET"})
+     */
+
+    public function listerperiodeRetrait(ValidatorInterface $validator, Request $request, TransactionRepository $transRepository,SerializerInterface $serializer)
+    {
+        $values = json_decode($request->getContent(),true);
+
+        $debut=$values['debut'];
+        $fin = $values['fin'];
+        //dump($values);
+        $user =$this->getUser()->getUserpresta()->getId();
+        //dump($user);
+        $debut=(new \DateTime($debut));
+        $fin=(new \DateTime($fin));
+
+        $transaction = $transRepository->findByPeriodeRetrait($debut,$fin,$user);
+       // dump($transaction);
+        $data = $serializer->serialize($transaction, 'json',['groups'=>['retrait']]);
+
+      
+      return new Response(
+          $data,
+          200,
+          [
+              'Content-Type' => 'application/json'
+          ]
+      );
+    }
   
 }
+
