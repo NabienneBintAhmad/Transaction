@@ -36,7 +36,8 @@ class Tarif
     private $BS;
 
     /**
-
+     * @Groups({"retrait"})
+     * @Groups({"envoie"})
      * @Groups({"tarif"})
      * @ORM\Column(type="bigint")
      */

@@ -41,6 +41,7 @@ return [
         '/api/listtransac' => [[['_route' => 'transactionlist', '_controller' => 'App\\Controller\\TransactionController::list'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/api/listerperiodeEnvoie' => [[['_route' => 'listerperiodeEnvoie', '_controller' => 'App\\Controller\\TransactionController::listerperiode'], null, ['POST' => 0, 'GET' => 1], null, false, false, null]],
         '/api/listerperiodeEnvoieAdmin' => [[['_route' => 'listerperiodeEnvoieAdmin', '_controller' => 'App\\Controller\\TransactionController::listerperiodeEnvoieAdmin'], null, ['POST' => 0, 'GET' => 1], null, false, false, null]],
+        '/api/listerperiodeRetraitAdmin' => [[['_route' => 'listerperiodeRetraitAdmin', '_controller' => 'App\\Controller\\TransactionController::listerperiodeRetraitAdmin'], null, ['POST' => 0, 'GET' => 1], null, false, false, null]],
         '/api/listerperiodeRetrait' => [[['_route' => 'listerperiodeRetrait', '_controller' => 'App\\Controller\\TransactionController::listerperiodeRetrait'], null, ['POST' => 0, 'GET' => 1], null, false, false, null]],
         '/api/users' => [[['_route' => 'user_prestataire_new', '_controller' => 'App\\Controller\\UserPrestataireController::new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/api/comptetravail' => [[['_route' => 'comptetravail', '_controller' => 'App\\Controller\\UserPrestataireController::comptetravail'], null, ['POST' => 0], null, false, false, null]],

@@ -110,10 +110,16 @@ class Admin
      */
     private $users;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Transaction", mappedBy="adminEnv")
+     */
+    private $transactions;
+
     public function __construct()
     {
         $this->prestataires = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -286,6 +292,37 @@ class Admin
             // set the owning side to null (unless already changed)
             if ($user->getAdmin() === $this) {
                 $user->setAdmin(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Transaction[]
+     */
+    public function getTransactions(): Collection
+    {
+        return $this->transactions;
+    }
+
+    public function addTransaction(Transaction $transaction): self
+    {
+        if (!$this->transactions->contains($transaction)) {
+            $this->transactions[] = $transaction;
+            $transaction->setAdminEnv($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTransaction(Transaction $transaction): self
+    {
+        if ($this->transactions->contains($transaction)) {
+            $this->transactions->removeElement($transaction);
+            // set the owning side to null (unless already changed)
+            if ($transaction->getAdminEnv() === $this) {
+                $transaction->setAdminEnv(null);
             }
         }
 

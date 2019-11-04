@@ -73,6 +73,29 @@ class TransactionRepository extends ServiceEntityRepository
     * @param $user
     * @return Operations[] Returns an array of Operations objects
     */
+    public function findByPeriodeAdmin($debut,$fin,$user): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->andWhere('p.date >= :debut' )
+            ->andWhere('p.date <= :fin ' )
+            ->addSelect('r')
+            ->leftJoin('p.adminEnv','r')
+            ->andWhere('r.id =:val')
+            ->setParameter('debut', $debut->format('Y-m-d') . ' 00:00:00')
+            ->setParameter('fin', $fin->format('Y-m-d') . ' 23:59:59')
+            ->setParameter('val', $user)
+            ->getQuery();
+        return $qb->execute();
+    }
+
+
+
+  /**
+    * @param $debut
+    * @param $fin
+    * @param $user
+    * @return Operations[] Returns an array of Operations objects
+    */
     public function findByPeriodeRetrait($debut,$fin,$user): array
     {
         $qb = $this->createQueryBuilder('p')
@@ -80,6 +103,27 @@ class TransactionRepository extends ServiceEntityRepository
             ->andWhere('p.dateRetrait <= :fin ' )
             ->addSelect('r')
             ->leftJoin('p.serviceRetrait','r')
+            ->andWhere('r.id =:val')
+            ->setParameter('debut', $debut->format('Y-m-d') . ' 00:00:00')
+            ->setParameter('fin', $fin->format('Y-m-d') . ' 23:59:59')
+            ->setParameter('val', $user)
+            ->getQuery();
+        return $qb->execute();
+    }
+
+    /**
+    * @param $debut
+    * @param $fin
+    * @param $user
+    * @return Operations[] Returns an array of Operations objects
+    */
+    public function findByPeriodeRetraitAdmin($debut,$fin,$user): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->andWhere('p.dateRetrait >= :debut' )
+            ->andWhere('p.dateRetrait <= :fin ' )
+            ->addSelect('r')
+            ->leftJoin('p.adminRet','r')
             ->andWhere('r.id =:val')
             ->setParameter('debut', $debut->format('Y-m-d') . ' 00:00:00')
             ->setParameter('fin', $fin->format('Y-m-d') . ' 23:59:59')

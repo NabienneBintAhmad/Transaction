@@ -51,6 +51,7 @@ return [
     'transaction_delete' => [['id'], ['_controller' => 'App\\Controller\\TransactionController::delete'], ['id' => '\\d+'], [['variable', '/', '\\d+', 'id', true], ['text', '/api']], [], []],
     'listerperiodeEnvoie' => [[], ['_controller' => 'App\\Controller\\TransactionController::listerperiode'], [], [['text', '/api/listerperiodeEnvoie']], [], []],
     'listerperiodeEnvoieAdmin' => [[], ['_controller' => 'App\\Controller\\TransactionController::listerperiodeEnvoieAdmin'], [], [['text', '/api/listerperiodeEnvoieAdmin']], [], []],
+    'listerperiodeRetraitAdmin' => [[], ['_controller' => 'App\\Controller\\TransactionController::listerperiodeRetraitAdmin'], [], [['text', '/api/listerperiodeRetraitAdmin']], [], []],
     'listerperiodeRetrait' => [[], ['_controller' => 'App\\Controller\\TransactionController::listerperiodeRetrait'], [], [['text', '/api/listerperiodeRetrait']], [], []],
     'user_prestataire_index' => [[], ['_controller' => 'App\\Controller\\UserPrestataireController::index'], [], [['text', '/api/']], [], []],
     'user_prestataire_new' => [[], ['_controller' => 'App\\Controller\\UserPrestataireController::new'], [], [['text', '/api/users']], [], []],

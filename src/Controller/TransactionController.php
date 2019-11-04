@@ -79,11 +79,14 @@ class TransactionController extends AbstractController
                 }
             }
             $transaction->setCommission($values);
+            $transaction->setComEnv($commission);
            
             $transaction->setLibelle('envoie') ; 
             $transaction->setStatut('Pas retiré!') ; 
           
             $findcompte=$this->getUser()->getCompteTravail();
+            $admin=$this->getUser()->getAdmin();
+            $transaction->setAdminEnv($admin);
            // dump($connex);die();entityManager
             //$connex;
            // dump($connex->getCompteTravail()); die();
@@ -263,14 +266,17 @@ class TransactionController extends AbstractController
               if ($transaction->getMontant() >= $values->getBI() && $transaction->getMontant() <= $values->getBS());
               {
                   $tarif= $values->getPrix();
-                  $commission=($tarif*10)/100;
+                  $commission=($tarif*20)/100;
 
                   break;
               }
           }
 
           $transaction->SetStatut("retiré");
+          $transaction->SetComRet($commission);
           $transaction->SetRecepteurCni($a);
+          $admin=$this->getUser()->getAdmin();
+          $transaction->setAdminRet($admin);
           $findcompte->setSolde($findcompte->getSolde()+$transaction->getMontant()+$commission);
               $errors = $validator->validate($transaction);
               if (count($errors))
@@ -363,15 +369,38 @@ class TransactionController extends AbstractController
 
     public function listerperiode(ValidatorInterface $validator, Request $request, TransactionRepository $transRepository,SerializerInterface $serializer)
     {
+   
         $values = json_decode($request->getContent(),true);
 
         $debut=$values['debut'];
         $fin = $values['fin'];
         //dump($values);
         $user =$this->getUser()->getUserpresta()->getId();
-        // dump($user);
-        $debut=(new \DateTime($debut));
-        $fin=(new \DateTime($fin));
+        //dump($user);
+        if ($debut=="" && $fin=="") {
+
+            $debut = (new DateTime);
+            $fin = (new DateTime);
+        
+        } elseif ($debut=="" && $fin!="") {
+
+            $debut = (new \DateTime($fin));
+            $fin = (new \DateTime($fin));
+        } elseif ($debut!="" &&  $fin=="") {
+
+            $debut = (new \DateTime($debut));
+            $fin = (new \DateTime());
+
+        } elseif ($debut!="" &&  $fin!="") {
+            $debut = (new \DateTime($debut));
+            $fin = (new \DateTime($fin));
+        }
+
+        // $datetime = date("Y-m-d H:i:s");
+        // echo $datetime;
+ 
+  
+   
 
         $transaction = $transRepository->findByPeriode($debut,$fin,$user);
        // dump($transaction);
@@ -394,21 +423,38 @@ class TransactionController extends AbstractController
 
     public function listerperiodeEnvoieAdmin(ValidatorInterface $validator, Request $request, TransactionRepository $transRepository,SerializerInterface $serializer)
     {
+
+ 
         $values = json_decode($request->getContent(),true);
 
         $debut=$values['debut'];
         $fin = $values['fin'];
-        $user =$this->getUser()->getUserpresta()->getId();
+        //dump($values);
+        $user =$this->getUser()->getAdmin()->getId();
         // dump($user);
-        $debut=(new \DateTime($debut));
-        $fin=(new \DateTime($fin));
+        if ($debut=="" && $fin=="") {
 
-        $transaction = $transRepository->findByPeriode($debut,$fin,$user);
+            $debut = (new DateTime);
+            $fin = (new DateTime);
+        
+        } elseif ($debut=="" && $fin!="") {
+
+            $debut = (new \DateTime($fin));
+            $fin = (new \DateTime($fin));
+        } elseif ($debut!="" &&  $fin=="") {
+
+            $debut = (new \DateTime($debut));
+            $fin = (new \DateTime());
+
+        } elseif ($debut!="" &&  $fin!="") {
+            $debut = (new \DateTime($debut));
+            $fin = (new \DateTime($fin));
+        }
+
+        $transaction = $transRepository->findByPeriodeAdmin($debut,$fin,$user);
+       // dump($transaction);
         $data = $serializer->serialize($transaction, 'json',['groups'=>['envoie']]);
 
-        $list=$transRepository->findBy(['multiservice'=>$user]);
-//$list->getMultiservice();
-        dump($list);
       
       return new Response(
           $data,
@@ -420,6 +466,53 @@ class TransactionController extends AbstractController
     }
 
 
+     /**
+     * @Route("/listerperiodeRetraitAdmin", name="listerperiodeRetraitAdmin", methods={"POST", "GET"})
+     */
+
+    public function listerperiodeRetraitAdmin(ValidatorInterface $validator, Request $request, TransactionRepository $transRepository,SerializerInterface $serializer)
+    {
+       
+     
+        $values = json_decode($request->getContent(),true);
+
+        $debut=$values['debut'];
+        $fin = $values['fin'];
+        //dump($values);
+        $user =$this->getUser()->getAdmin()->getId();
+        // dump($user);
+        if ($debut=="" && $fin=="") {
+
+            $debut = (new DateTime);
+            $fin = (new DateTime);
+        
+        } elseif ($debut=="" && $fin!="") {
+
+            $debut = (new \DateTime($fin));
+            $fin = (new \DateTime($fin));
+        } elseif ($debut!="" &&  $fin=="") {
+
+            $debut = (new \DateTime($debut));
+            $fin = (new \DateTime());
+
+        } elseif ($debut!="" &&  $fin!="") {
+            $debut = (new \DateTime($debut));
+            $fin = (new \DateTime($fin));
+        }
+        $transaction = $transRepository->findByPeriodeRetraitAdmin($debut,$fin,$user);
+       // dump($transaction);
+        $data = $serializer->serialize($transaction, 'json',['groups'=>['retrait']]);
+
+      
+      return new Response(
+          $data,
+          200,
+          [
+              'Content-Type' => 'application/json'
+          ]
+      );
+    }
+
 
     /**
      * @Route("/listerperiodeRetrait", name="listerperiodeRetrait", methods={"POST", "GET"})
@@ -427,6 +520,8 @@ class TransactionController extends AbstractController
 
     public function listerperiodeRetrait(ValidatorInterface $validator, Request $request, TransactionRepository $transRepository,SerializerInterface $serializer)
     {
+
+    
         $values = json_decode($request->getContent(),true);
 
         $debut=$values['debut'];
@@ -434,8 +529,24 @@ class TransactionController extends AbstractController
         //dump($values);
         $user =$this->getUser()->getUserpresta()->getId();
         //dump($user);
-        $debut=(new \DateTime($debut));
-        $fin=(new \DateTime($fin));
+        if ($debut=="" && $fin=="") {
+
+            $debut = (new DateTime);
+            $fin = (new DateTime);
+        
+        } elseif ($debut=="" && $fin!="") {
+
+            $debut = (new \DateTime($fin));
+            $fin = (new \DateTime($fin));
+        } elseif ($debut!="" &&  $fin=="") {
+
+            $debut = (new \DateTime($debut));
+            $fin = (new \DateTime());
+
+        } elseif ($debut!="" &&  $fin!="") {
+            $debut = (new \DateTime($debut));
+            $fin = (new \DateTime($fin));
+        }
 
         $transaction = $transRepository->findByPeriodeRetrait($debut,$fin,$user);
        // dump($transaction);
